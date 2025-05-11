@@ -5,46 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <title>SeeLirik</title>
 </head>
-<body class="bg-slate-900">
-    <nav class="p-5 bg-slate-950 shadow md:flex md:items-center md:justify-between">
-        <div class="flex justify-between items-center ">
-            <span class="cursor-pointer">
-                <img class="h-9 inline" src="../../../public/images/LogoText SeeLirik rose-600.png" alt="Logo-SeeLirik.png">
-            </span>
+<body class="bg-neutral-900">
+    <header>
+        <nav class="p-5 bg-neutral-800 shadow md:flex md:items-center md:justify-between">
+            <div class="flex justify-between items-center ">
+                <span class="cursor-pointer">
+                    <img class="h-9 inline" src="../../../public/images/logotext-seelirik.png" alt="Logo-SeeLirik.png">
+                </span>
 
-            <span class="text-3xl cursor-pointer mx-2 md:hidden block fill-white">
-                <ion-icon name="menu" style="color: #ffffff;"></ion-icon>
-            </span>
-        </div>
+                <span class="text-3xl cursor-pointer mx-2 md:hidden block fill-white">
+                    <ion-icon name="menu" style="color: #ffffff;"></ion-icon>
+                </span>
+            </div>
 
-        <ul class="md:flex md:items-center font-semibold z-[-1] md:z-auto md:static absolute bg-slate-950 w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500">
-            <li class="mx-4 md:my-o">
-                <a href="#" class="text-xl text-white hover:text-rose-500 duration-500 ">Services</a>
-            </li>
-            <li class="mx-4">
-                <a href="#" class="text-xl text-white hover:text-rose-500 duration-500 ">Demo</a>
-            </li>
-            <li class="mx-4">
-                <a href="#" class="text-xl text-white hover:text-rose-500 duration-500 ">Price</a>
-            </li>
-            <li class="mx-4">
-                <a href="#" class="text-xl text-white hover:text-rose-500 duration-500 ">About Us</a>
-            </li>
-            <li class="mx-4">
-                <a href="#" class="text-xl text-white hover:text-rose-500 duration-500 ">Contact Us</a>
-            </li>
-
-            <button class="bg-rose-600 text-white font-[Montserrat] font-semi-bold duration-500 px-6 pt-2 pb-2 ml-4 mr-2 hover:bg-rose-800 rounded-lg cursor-pointer">
-                Sign Up
+            <ul class="absolute top-[-400px] left-0 w-full opacity-0 z-[-1] custom-color2
+                        md:static md:z-auto md:flex md:items-center md:justify-center md:w-auto
+                        md:opacity-100 md:py-0 md:pl-0
+                        py-4 pl-7
+                        font-semibold transition-all ease-in duration-500">
+                
+                <li class="mx-5 md:my-0">
+                    <a href="#home" class="text-xl text-white hover:text-emerald-400 duration-500">Home</a>
+                </li>
+                <li class="mx-5">
+                    <a href="#about-us" class="text-xl text-white hover:text-emerald-400 duration-500">About Us</a>
+                </li>
+                <li class="mx-5">
+                    <a href="#demo" class="text-xl text-white hover:text-emerald-400 duration-500">Demo</a>
+                </li>
+                <li class="mx-5">
+                    <a href="#contact-us" class="text-xl text-white hover:text-emerald-400 duration-500">Contact Us</a>
+                </li> 
+            </ul>
+            
+            <button class="hidden md:block bg-emerald-400 text-white px-4 py-2 rounded-3xl hover:bg-emerald-600 duration-500 cursor-pointer">
+                    Get Started
             </button>
-            <button class="bg-rose-600 text-white font-[Montserrat] font-semi-bold duration-500 px-6 pt-2 pb-2 mr-4 ml-2 hover:bg-rose-800 rounded-lg cursor-pointer">
-                Login
-            </button>
-        </ul>
-    </nav>
+        </nav>
+    </header>
     
+    <main>
+        <!-- HOME -->
+        <section id="home" class="min-h-screen flex items-center justify-center px-6 bg-neutral-900">
+            <div class="container mx-auto justify-between md:flex items-center space-x-6">
+                <div class="md:w-4/6 text-center md:text-left">
+                    <h4 class="text-white text-xl font-bold">SeeLirik</h4>
+                    <h3 class="text-white text-5xl font-bold mb-5 py-4">Deteksi Shoplifting Otomatis Berbasis AI</h3>
+                    <p class="text-white mb-5 text-xl">
+                        Lindungi toko Anda dari kerugian akibat pencurian dengan sistem cerdas SeeLirik. Teknologi AI kami menganalisis perilaku mencurigakan secara real-time melalui CCTV dan memberikan notifikasi instan kepada petugas keamanan. Lebih dari sekadar rekaman—SeeLirik adalah keamanan proaktif untuk ritel masa kini.
+                    </p>
+                    <button class="bg-emerald-400 text-white px-4 py-2 rounded-3xl cursor-pointer hover:bg-emerald-600 duration-500">Get Started</button>
+                </div>
+                <img class="md:w-2/6" src="../../../public/images/ilustrasi-cctv.png" alt="cctv.png">
+            </div>
+        </section>
+
+        <!-- ABOUT US -->
+        <section id="about-us" class="container mx-auto min-h-screen bg-neutral-900 text-center">
+            <h1 class="text-white text-4xl font-bold py-10">Kenapa Memilih SeeLirik?</h1>
+            <div class=" container mx-auto flex md:flex items-center space-x-6">
+                <div class=" bg-neutral-800 max-w-xs rounded-xl">
+                    <h5 class="text-white font-bold p-4">Deteksi Real-Time</h5>
+                    <p class="text-white p-4 pb-8">memantau CCTV secara langsung dan memberikan peringatan instan saat mendeteksi gerakan mencurigakan.</p>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- DEMO -->
+        <section id="demo">
+        </section>
+        
+        <!-- CONTACT US -->
+        <section id="contact-us">
+        </section>
+    </main>
+    
+    
+    <script>
+        // Ambil elemen menu dan icon hamburger
+        const menuIcon = document.querySelector('ion-icon[name="menu"]');
+        const navLinks = document.querySelector('nav ul');
+
+        // Toggle menu ketika icon hamburger diklik
+        menuIcon.addEventListener('click', () => {
+            if (navLinks.classList.contains('top-[-400px]')) {
+                navLinks.classList.remove('top-[-400px]');
+                navLinks.classList.add('top-[80px]', 'opacity-100');
+            } else {
+                navLinks.classList.add('top-[-400px]');
+                navLinks.classList.remove('top-[80px]', 'opacity-100');
+            }
+        });
+    </script>
+
 </body>
 </html>
