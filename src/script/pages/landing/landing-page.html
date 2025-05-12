@@ -50,29 +50,42 @@
     <main>
         <!-- HOME -->
         <section id="home" class="min-h-screen flex items-center justify-center px-6 bg-neutral-900">
-            <div class="container mx-auto justify-between md:flex items-center space-x-6">
+            <div class="container mx-auto flex flex-col-reverse md:flex-row items-center md:space-x-6 space-y-6 md:space-y-0">
                 <div class="md:w-4/6 text-center md:text-left">
-                    <h4 class="text-white text-xl font-bold">SeeLirik</h4>
+                    <h4 class="text-white text-2xl font-bold pt-4">SeeLirik</h4>
                     <h3 class="text-white text-5xl font-bold mb-5 py-4">Deteksi Shoplifting Otomatis Berbasis AI</h3>
                     <p class="text-white mb-5 text-xl">
                         Lindungi toko Anda dari kerugian akibat pencurian dengan sistem cerdas SeeLirik. Teknologi AI kami menganalisis perilaku mencurigakan secara real-time melalui CCTV dan memberikan notifikasi instan kepada petugas keamanan. Lebih dari sekadar rekaman—SeeLirik adalah keamanan proaktif untuk ritel masa kini.
                     </p>
                     <button class="bg-emerald-400 text-white px-4 py-2 rounded-3xl cursor-pointer hover:bg-emerald-600 duration-500">Get Started</button>
                 </div>
-                <img class="md:w-2/6" src="../../../public/images/ilustrasi-cctv.png" alt="cctv.png">
+                <img class="w-3/4 mx-auto mt-10 md:w-2/6 md:mt-0" src="../../../public/images/ilustrasi-cctv.png" alt="cctv.png">
             </div>
         </section>
 
         <!-- ABOUT US -->
         <section id="about-us" class="container mx-auto min-h-screen bg-neutral-900 text-center">
-            <h1 class="text-white text-4xl font-bold py-10">Kenapa Memilih SeeLirik?</h1>
-            <div class=" container mx-auto flex md:flex items-center space-x-6">
-                <div class=" bg-neutral-800 max-w-xs rounded-xl">
-                    <h5 class="text-white font-bold p-4">Deteksi Real-Time</h5>
-                    <p class="text-white p-4 pb-8">memantau CCTV secara langsung dan memberikan peringatan instan saat mendeteksi gerakan mencurigakan.</p>
+            <h1 class="text-white text-4xl font-bold py-15">Kenapa Memilih SeeLirik?</h1>
+            <div class="container mx-auto flex flex-col md:flex-row items-stretch space-y-6 md:space-y-0 md:space-x-6 justify-center py-10">
+                <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+                    <img src="../../../public/images/detection.png" alt="detection.png" class="p-5 w-40 h-40 object-contain">
+                    <h5 class="text-white text-xl font-bold my-4">Deteksi Real-Time</h5>
+                    <p class="text-white">Memantau CCTV secara langsung dan mengenali pola mencurigakan untuk mencegah pencurian sebelum terjadi</p>
                 </div>
-                
+
+                <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+                    <img src="../../../public/images/overview.png" alt="overview.png" class="p-5 w-40 h-40 object-contain">
+                    <h5 class="text-white text-xl font-bold my-4">Overview Data</h5>
+                    <p class="text-white">Lihat rekam jejak insiden, statistik, dan respon langsung dari dashboard yang memudahkan evaluasi keamanan toko Anda</p>
+                </div>
+
+                <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+                    <img src="../../../public/images/notif.png" alt="notif.png" class="p-5 w-40 h-40 object-contain">
+                    <h5 class="text-white text-xl font-bold my-4">Alarm & Pemberitahuan</h5>
+                    <p class="text-white">Memberi alarm dan notifikasi saat ancaman terdeteksi, memastikan Anda selalu selangkah lebih cepat</p>
+                </div>
             </div>
+
         </section>
 
         <!-- DEMO -->
