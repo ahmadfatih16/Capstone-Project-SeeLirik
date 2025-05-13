@@ -48,17 +48,17 @@
       </div>
 
       <nav class="space-y-2 mt-8">
-        <a href="dashboard-page.html" class="flex items-center p-3 rounded-md bg-neutral-900 hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
-          <img src="../../../public/images/dashboard/monitoring-icon-green.png" alt="" class="w-6 h-6 object-contain" />
-          <span class="ml-3 text-emerald-400">Monitoring</span>
+        <a href="dashboard-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
+          <img src="../../../public/images/dashboard/monitoring-icon.png" alt="" class="w-6 h-6 object-contain" />
+          <span class="ml-3">Monitoring</span>
         </a>
         <a href="kamera-keamanan-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
           <img src="../../../public/images/dashboard/kamera-icon.png" alt="" class="w-6 h-6 object-contain" />
           <span class="ml-3">Kamera Keamanan</span>
         </a>
-        <a href="riwayat-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
-          <img src="../../../public/images/dashboard/riwayat-icon.png" alt="" class="w-6 h-6 object-contain" />
-          <span class="ml-3">Riwayat Aktivitas</span>
+        <a href="riwayat-page.html" class="bg-neutral-900 flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
+          <img src="../../../public/images/dashboard/riwayat-icon-green.png" alt="" class="w-6 h-6 object-contain" />
+          <span class="ml-3 text-emerald-400">Riwayat Aktivitas</span>
         </a>
         <a href="akun-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
           <img src="../../../public/images/dashboard/akun-icon.png" alt="" class="w-6 h-6 object-contain" />
@@ -85,23 +85,61 @@
     <!-- Main -->
     <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
       <!-- Datetime -->
-      <div class="flex sm:flex-row justify-between sm:items-center w-full mb-4 text-sm sm:text-base md:text-lg lg:text-2xl font-semibold gap-2">
+      <div class="flex flex-row justify-between sm:items-center w-full mb-6 text-sm sm:text-base md:text-lg lg:text-2xl font-semibold gap-2">
         <h2 id="tanggal">Selasa, 13 Mei 2025</h2>
-        <h2 id="judul-kamera">Kamera Dalam</h2>
         <h2 id="waktu">01.00.00 WIB</h2>
       </div>
 
-      <!-- Video -->
-      <div class="w-full max-w-5xl mx-auto">
-        <video controls class="w-full aspect-video rounded-3xl">
-          <source src="../../../public/video/contoh.mp4" type="video/mp4" />
-          Browser tidak mendukung video.
-        </video>
-      </div>
+      <!-- Judul -->
+      <h3 class="text-2xl font-bold text-emerald-400 mb-4">Riwayat Aktifitas Mencurigakan</h3>
 
-      <!-- Kamera List -->
-      <div id="kamera-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4 justify-items-center text-sm sm:text-base">
-        <!-- Akan diisi oleh JS -->
+      <!-- Tabel Responsif Riwayat -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-neutral-700 text-sm sm:text-base">
+          <thead>
+            <tr class="text-left text-emerald-400">
+              <th class="px-4 py-2">Tanggal</th>
+              <th class="px-4 py-2">Waktu</th>
+              <th class="px-4 py-2">Kamera</th>
+              <th class="px-4 py-2">Kamera</th>
+              <th class="px-4 py-2">Aktifitas</th>
+              <th class="px-4 py-2">Alarm</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-700">
+            <!-- Baris Riwayat -->
+            <tr class="hover:bg-neutral-800 transition cursor-pointer" onclick="location.href='detail-riwayat-page.html'">
+              <td class="px-4 py-3">Jumat, 16 Mei 2025</td>
+              <td class="px-4 py-3">08:12:49</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Pencurian Indomie</td>
+              <td class="px-4 py-3">
+                <span class="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-xs">aktif</span>
+              </td>
+            </tr>
+            <tr class="hover:bg-neutral-800 transition cursor-pointer" onclick="location.href='detail-riwayat-page.html'">
+              <td class="px-4 py-3">Jumat, 16 Mei 2025</td>
+              <td class="px-4 py-3">08:12:49</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Pencurian Indomie</td>
+              <td class="px-4 py-3">
+                <span class="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-xs">aktif</span>
+              </td>
+            </tr>
+            <tr class="hover:bg-neutral-800 transition cursor-pointer" onclick="location.href='detail-riwayat-page.html'">
+              <td class="px-4 py-3">Jumat, 16 Mei 2025</td>
+              <td class="px-4 py-3">08:12:49</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Kamera Dalam Toko</td>
+              <td class="px-4 py-3">Pencurian Indomie</td>
+              <td class="px-4 py-3">
+                <span class="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-xs">aktif</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- Modal Keluar -->
