@@ -48,17 +48,17 @@
       </div>
 
       <nav class="space-y-2 mt-8">
-        <a href="dashboard-page.html" class="flex items-center p-3 rounded-md bg-neutral-900 hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
-          <img src="../../../public/images/dashboard/monitoring-icon-green.png" alt="" class="w-6 h-6 object-contain" />
-          <span class="ml-3 text-emerald-400">Monitoring</span>
+        <a href="dashboard-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
+          <img src="../../../public/images/dashboard/monitoring-icon.png" alt="" class="w-6 h-6 object-contain" />
+          <span class="ml-3">Monitoring</span>
         </a>
         <a href="kamera-keamanan-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
           <img src="../../../public/images/dashboard/kamera-icon.png" alt="" class="w-6 h-6 object-contain" />
           <span class="ml-3">Kamera Keamanan</span>
         </a>
-        <a href="riwayat-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
-          <img src="../../../public/images/dashboard/riwayat-icon.png" alt="" class="w-6 h-6 object-contain" />
-          <span class="ml-3">Riwayat Aktivitas</span>
+        <a href="riwayat-page.html" class="flex items-center p-3 rounded-md bg-neutral-900 hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
+          <img src="../../../public/images/dashboard/riwayat-icon-green.png" alt="" class="w-6 h-6 object-contain" />
+          <span class="ml-3 text-emerald-400">Riwayat Aktivitas</span>
         </a>
         <a href="akun-page.html" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors">
           <img src="../../../public/images/dashboard/akun-icon.png" alt="" class="w-6 h-6 object-contain" />
@@ -84,24 +84,61 @@
 
     <!-- Main -->
     <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
-      <!-- Datetime -->
-      <div class="flex sm:flex-row justify-between sm:items-center w-full mb-4 text-sm sm:text-base md:text-lg lg:text-2xl font-semibold gap-2">
-        <h2 id="tanggal">Selasa, 13 Mei 2025</h2>
-        <h2 id="judul-kamera">Kamera Dalam</h2>
-        <h2 id="waktu">01.00.00 WIB</h2>
+      <!-- Header -->
+      <div class="flex flex-row justify-between sm:items-center w-full mb-6 text-sm sm:text-base md:text-lg lg:text-2xl font-semibold gap-2">
+        <h2 id="tanggal">Jumat, 16 Mei 2025</h2>
+        <h2 id="waktu">08:12:49 WIB</h2>
       </div>
 
-      <!-- Video -->
-      <div class="w-full max-w-5xl mx-auto">
-        <video controls class="w-full aspect-video rounded-3xl">
-          <source src="../../../public/video/contoh.mp4" type="video/mp4" />
-          Browser tidak mendukung video.
-        </video>
+      <!-- Layout 2 Kolom: Foto dan Video -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Foto Bukti -->
+        <div class="bg-neutral-800 p-4 rounded">
+          <h3 class="text-lg font-semibold mb-2">Foto Bukti</h3>
+          <img src="../../../public/images/pencurian.jpeg" alt="Bukti Foto" class="w-full rounded-lg object-cover h-72" />
+        </div>
+
+        <!-- Video Rekaman -->
+        <div class="bg-neutral-800 p-4 rounded">
+          <h3 class="text-lg font-semibold mb-2">Video Rekaman</h3>
+          <video controls class="w-full aspect-video rounded-lg">
+            <source src="../../../public/video/bukti.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+        </div>
       </div>
 
-      <!-- Kamera List -->
-      <div id="kamera-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4 justify-items-center text-sm sm:text-base">
-        <!-- Akan diisi oleh JS -->
+      <!-- Tabel Informasi Detil -->
+      <div class="bg-neutral-800 p-4 rounded">
+        <h3 class="text-lg font-semibold mb-4">Detail Aktivitas</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:text-base">
+          <div>
+            <span class="text-neutral-400">Tanggal</span>
+            <p class="font-semibold">Jumat, 16 Mei 2025</p>
+          </div>
+          <div>
+            <span class="text-neutral-400">Waktu</span>
+            <p class="font-semibold">08:12:49</p>
+          </div>
+          <div>
+            <span class="text-neutral-400">Kamera</span>
+            <p class="font-semibold">Kamera Dalam Toko</p>
+          </div>
+          <div>
+            <span class="text-neutral-400">Lokasi Kamera</span>
+            <p class="font-semibold">Rak Indomie</p>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-neutral-400">Aktivitas</span>
+            <p class="font-semibold">Pencurian produk Indomie sebanyak 3 bungkus dari rak tengah.</p>
+          </div>
+          <div>
+            <span class="text-neutral-400">Status Alarm</span>
+            <p>
+              <span class="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-xs font-semibold">aktif</span>
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Modal Keluar -->
