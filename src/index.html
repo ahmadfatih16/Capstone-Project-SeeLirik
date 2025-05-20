@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <link rel="stylesheet" href="./styles/output.css" /> -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <title>SeeLirik</title>
+  </head>
+  <body class="bg-neutral-900">
+    <header>
+      <nav class="p-5 bg-neutral-800 shadow md:flex md:items-center md:justify-between">
+        <div class="flex justify-between items-center">
+          <span class="cursor-pointer">
+            <img class="h-9 inline" src="../../../public/images/logotext-seelirik.png" alt="Logo-SeeLirik.png" />
+          </span>
+
+          <span class="text-3xl cursor-pointer mx-2 md:hidden block fill-white">
+            <ion-icon name="menu" style="color: #ffffff"></ion-icon>
+          </span>
+        </div>
+
+        <ul
+          class="absolute top-[-400px] left-0 w-full opacity-0 z-[-1] custom-color2 md:static md:z-auto md:flex md:items-center md:justify-center md:w-auto md:opacity-100 md:py-0 md:pl-0 py-4 pl-7 font-semibold transition-all ease-in duration-500"
+        >
+          <li class="mx-5 md:my-0">
+            <a href="#home" class="text-xl text-white hover:text-emerald-400 duration-500">Beranda</a>
+          </li>
+          <li class="mx-5">
+            <a href="#about" class="text-xl text-white hover:text-emerald-400 duration-500">Tentang</a>
+          </li>
+          <li class="mx-5">
+            <a href="#demo" class="text-xl text-white hover:text-emerald-400 duration-500">Demo</a>
+          </li>
+          <li class="mx-5">
+            <a href="#contact" class="text-xl text-white hover:text-emerald-400 duration-500">Kontak</a>
+          </li>
+        </ul>
+
+        <a href="../login/loginpage.html" class="hidden md:block bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 duration-500 cursor-pointer"> Mulai Sekarang </a>
+      </nav>
+    </header>
+
+    <main class="px-10">
+      <!-- HOME -->
+      <section id="home" class="min-h-screen flex items-center justify-center px-6 bg-neutral-900">
+        <div class="container mx-auto flex flex-col-reverse md:flex-row items-center md:space-x-6 space-y-6 md:space-y-0">
+          <div class="md:w-4/6 text-center md:text-left">
+            <h4 class="text-white text-2xl font-bold pt-4">SeeLirik</h4>
+            <h3 class="text-white text-5xl font-bold mb-5 py-4">Deteksi <span class="text-emerald-400">Shoplifting</span> Otomatis Berbasis AI</h3>
+            <p class="text-white mb-5 text-xl">
+              Lindungi toko Anda dari kerugian akibat pencurian dengan sistem cerdas SeeLirik. Teknologi AI kami menganalisis perilaku mencurigakan secara real-time melalui CCTV dan memberikan notifikasi instan kepada petugas keamanan.
+              Lebih dari sekadar rekaman—SeeLirik adalah keamanan proaktif untuk ritel masa kini.
+            </p>
+
+            <a href="../login/loginpage.html" class="bg-emerald-400 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-emerald-600 duration-500"> Mulai Sekarang </a>
+          </div>
+          <img class="w-4/6 mx-auto mt-10 md:w-2/6 md:mt-0" src="../../../public/images/ilustrasi-cctv.png" alt="cctv.png" />
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="container mx-auto min-h-screen bg-neutral-900 text-center">
+        <h1 class="text-white text-5xl font-bold py-15">Kenapa Memilih <span class="text-emerald-400">SeeLirik</span> ?</h1>
+        <div class="container mx-auto flex flex-col md:flex-row items-stretch space-y-6 md:space-y-0 md:space-x-6 justify-center py-10">
+          <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+            <img src="../../../public/images/detection.png" alt="detection.png" class="p-5 w-40 h-40 object-contain" />
+            <h5 class="text-white text-xl font-bold my-4">Deteksi Real-Time</h5>
+            <p class="text-white">Memantau CCTV secara langsung dan mengenali pola mencurigakan untuk mencegah pencurian sebelum terjadi</p>
+          </div>
+
+          <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+            <img src="../../../public/images/overview.png" alt="overview.png" class="p-5 w-40 h-40 object-contain" />
+            <h5 class="text-white text-xl font-bold my-4">Overview Data</h5>
+            <p class="text-white">Lihat rekam jejak insiden, statistik, dan respon langsung dari dashboard yang memudahkan evaluasi keamanan toko Anda</p>
+          </div>
+
+          <div class="bg-neutral-800 flex-1 rounded-xl p-10 flex flex-col items-center text-center">
+            <img src="../../../public/images/notif.png" alt="notif.png" class="p-5 w-40 h-40 object-contain" />
+            <h5 class="text-white text-xl font-bold my-4">Alarm & Pemberitahuan</h5>
+            <p class="text-white">Memberi alarm dan notifikasi saat ancaman terdeteksi, memastikan Anda selalu selangkah lebih cepat</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEMO -->
+      <section id="demo" class="container mx-auto py-16 md:py-24 bg-neutral-900 text-center">
+        <h1 class="text-white text-5xl font-bold py-15"><span class="text-emerald-400">Demo</span>nstrasi</h1>
+        <video controls class="mx-auto w-full max-w-5xl mt-6 rounded-lg shadow-lg">
+          <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+        </video>
+      </section>
+
+      <!-- CONTACT US -->
+      <section id="contact" class="min-h-screen flex items-center justify-center px-6 bg-neutral-900">
+        <div class="container mx-auto flex flex-col md:flex-row items-center md:space-x-3 space-y-6 md:space-y-0">
+          <div class="md:w-3/6 text-center md:text-left">
+            <h3 class="text-white text-6xl font-bold mb-5 py-4">Hubungi <span class="text-emerald-400">kami</span></h3>
+            <p class="text-white mb-5 text-xl">Hubungi kami untuk mendiskusikan bagaimana SeeLirik dapat membantu bisnis Anda lebih aman.</p>
+
+            <!-- email -->
+            <div class="flex flex-col items-center text-center md:flex-row md:items-center md:text-left space-y-2 md:space-y-0 md:space-x-1 my-4">
+              <img class="w-11 h-11" src="../../../public/images/email.png" alt="email.png" />
+              <div class="mx-5">
+                <p class="text-white font-bold">Email</p>
+                <p class="text-white">seelirik@gmail.com</p>
+              </div>
+            </div>
+
+            <!-- phone -->
+            <div class="flex flex-col items-center text-center md:flex-row md:items-center md:text-left space-y-2 md:space-y-0 md:space-x-1 my-4">
+              <img class="w-11 h-11" src="../../../public/images/phone.png" alt="phone.png" />
+              <div class="mx-5">
+                <p class="text-white font-bold">No. Telpon</p>
+                <p class="text-white">0812-3456-7890</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-5/6 mx-auto mt-10 md:w-2/6 md:mt-0">
+            <!-- form -->
+            <form action="#" method="post" class="max-w-xl mx-auto bg-neutral-800 p-8 rounded-lg shadow-lg">
+              <div class="mb-4">
+                <label for="name" class="block text-white text-sm font-semibold mb-2">Nama:</label>
+                <input type="text" id="name" name="name" required class="w-full px-4 py-2 rounded-md bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 duration-500" />
+              </div>
+
+              <div class="mb-4">
+                <label for="email" class="block text-white text-sm font-semibold mb-2">Email:</label>
+                <input type="email" id="email" name="email" required class="w-full px-4 py-2 rounded-md bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 duration-500" />
+              </div>
+
+              <div class="mb-6">
+                <label for="message" class="block text-white text-sm font-semibold mb-2">Pesan:</label>
+                <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 rounded-md bg-neutral-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 duration-500"></textarea>
+              </div>
+
+              <button type="submit" class="w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-md transition duration-500 cursor-pointer">Kirim Pesan</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="bg-neutral-800 p-5 mt-10">
+        <p class="text-white text-center">&copy; 2025-SeeLirik. Semua hak dilindungi.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Ambil elemen menu dan icon hamburger
+      const menuIcon = document.querySelector('ion-icon[name="menu"]');
+      const navLinks = document.querySelector("nav ul");
+
+      // Toggle menu ketika icon hamburger diklik
+      menuIcon.addEventListener("click", () => {
+        if (navLinks.classList.contains("top-[-400px]")) {
+          navLinks.classList.remove("top-[-400px]");
+          navLinks.classList.add("top-[80px]", "opacity-100");
+        } else {
+          navLinks.classList.add("top-[-400px]");
+          navLinks.classList.remove("top-[80px]", "opacity-100");
+        }
+      });
+    </script>
+  </body>
+</html>
