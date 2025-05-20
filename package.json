@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "serve": "http-server dist",
+    "format": "prettier --write \"src/**/*.{js,html,css}\""
   },
   "repository": {
     "type": "git",
@@ -25,9 +27,11 @@
     "autoprefixer": "^10.4.21",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
+    "http-server": "^14.1.1",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.1.1",
+    "prettier": "^3.5.3",
     "style-loader": "^4.0.0",
     "tailwindcss": "^4.1.7",
     "webpack": "^5.99.8",
