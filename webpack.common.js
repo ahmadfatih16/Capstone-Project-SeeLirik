@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/script/index.js', // entry utama
+  entry: './src/scripts/index.js', // entry utama
   module: {
     rules: [
       {

@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>See Lirik - Dashboard</title>
+
+    <!-- Import Google Fonts: Montserrat -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CDN with custom font -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              montserrat: ['Montserrat', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="../../../styles/output.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body class="h-screen bg-neutral-900 text-white font-montserrat overflow-hidden relative">
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+    <!-- Mobile Navbar -->
+    <div class="lg:hidden flex justify-between items-center bg-neutral-800 p-4 z-50 relative">
+      <img src="../../../public/images/logotext-seelirik.png" class="h-8" />
+      <button id="hamburger" class="text-white text-2xl">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="w-full sm:w-72 max-w-full bg-neutral-800 p-4 h-screen fixed overflow-y-auto z-50 transform lg:translate-x-0 -translate-x-full transition-transform duration-300"
+    >
+      <div class="logo hidden lg:block">
+        <img
+          src="../../../public/images/logotext-seelirik.png"
+          class="text-xl font-bold mt-2 mb-5 h-10"
+        />
+      </div>
+
+      <div class="intro">
+        <p class="text-base font-light mb-1">Selamat Datang</p>
+        <p class="text-xl font-semibold">Ahmad Fatih Hibatillah</p>
+      </div>
+
+      <nav class="space-y-2 mt-8">
+        <a
+          href="dashboard-page.html"
+          class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors"
+        >
+          <img
+            src="../../../public/images/dashboard/monitoring-icon.png"
+            alt=""
+            class="w-6 h-6 object-contain"
+          />
+          <span class="ml-3">Monitoring</span>
+        </a>
+        <a
+          href="kamera-keamanan-page.html"
+          class="bg-neutral-900 flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors"
+        >
+          <img
+            src="../../../public/images/dashboard/kamera-icon-green.png"
+            alt=""
+            class="w-6 h-6 object-contain"
+          />
+          <span class="ml-3 text-emerald-400">Kamera Keamanan</span>
+        </a>
+        <a
+          href="riwayat-page.html"
+          class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors"
+        >
+          <img
+            src="../../../public/images/dashboard/riwayat-icon.png"
+            alt=""
+            class="w-6 h-6 object-contain"
+          />
+          <span class="ml-3">Riwayat Aktivitas</span>
+        </a>
+        <a
+          href="akun-page.html"
+          class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors"
+        >
+          <img
+            src="../../../public/images/dashboard/akun-icon.png"
+            alt=""
+            class="w-6 h-6 object-contain"
+          />
+          <span class="ml-3">Akun</span>
+        </a>
+        <a
+          href="../login/loginpage.html"
+          class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors"
+        >
+          <img
+            src="../../../public/images/dashboard/keluar-icon.png"
+            alt=""
+            class="w-6 h-6 object-contain"
+          />
+          <span class="ml-3">Keluar</span>
+        </a>
+      </nav>
+
+      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4">
+        <h3 class="text-sm text-center mb-3 text-white">Riwayat Aktivitas Mencurigakan</h3>
+        <a
+          href="detail-riwayat-page.html"
+          class="flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
+        >
+          <div class="flex justify-between items-center">
+            <span class="text-sm">Jumat, 16 Mei 2025</span>
+            <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
+          </div>
+          <div class="text-sm font-semibold">
+            13.05 <span class="font-semibold">| Kamera Belakang</span>
+          </div>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
+      <!-- Datetime -->
+      <div
+        class="flex flex-row justify-between sm:items-center w-full mb-4 text-sm sm:text-base md:text-lg lg:text-2xl font-semibold gap-2"
+      >
+        <h2 id="tanggal">Selasa, 13 Mei 2025</h2>
+        <h2 id="waktu">01.00.00 WIB</h2>
+      </div>
+
+      <!-- Tombol Tambah Kamera -->
+      <div
+        class="w-full bg-emerald-600 rounded-md py-2 px-4 text-center mb-6 text-white font-semibold cursor-pointer hover:bg-emerald-800 transition"
+      >
+        + Tambah Kamera
+      </div>
+
+      <!-- Grid Kamera -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8">
+        <!-- Card Kamera -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplikasi card kamera jika diperlukan -->
+        <div class="bg-neutral-800 rounded-md overflow-hidden">
+          <video controls class="w-full aspect-video rounded-sm">
+            <source src="../../../public/video/contoh.mp4" type="video/mp4" />
+            Browser tidak mendukung video.
+          </video>
+          <div class="flex justify-between items-center px-4 py-2">
+            <span class="text-sm sm:text-base">Kamera Samping</span>
+            <div class="flex gap-2 text-white">
+              <button class="hover:text-yellow-400">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="hover:text-red-500">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tambahkan lebih banyak card jika perlu -->
+      </div>
+
+      <!-- Modal Tambah Kamera -->
+      <div
+        id="modal-kamera"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+      >
+        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-md shadow-xl">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">Tambah Kamera</h3>
+            <button id="close-modal" class="text-white text-xl hover:text-red-500">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form class="space-y-4">
+            <div>
+              <label for="nama-kamera" class="block mb-1 text-sm">Nama Kamera</label>
+              <input
+                type="text"
+                id="nama-kamera"
+                class="w-full p-2 rounded-md bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <div>
+              <label for="url-kamera" class="block mb-1 text-sm">URL Video / Stream</label>
+              <input
+                type="text"
+                id="url-kamera"
+                class="w-full p-2 rounded-md bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <div class="flex justify-end space-x-3">
+              <button
+                type="button"
+                id="batal-modal"
+                class="px-4 py-2 bg-neutral-600 rounded hover:bg-neutral-700"
+              >
+                Batal
+              </button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 rounded hover:bg-emerald-700">
+                Simpan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal Keluar -->
+      <div
+        id="modal-keluar"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+      >
+        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-sm">
+          <h3 class="text-lg font-semibold mb-4">Konfirmasi Keluar</h3>
+          <p class="mb-6 text-sm">Apakah Anda yakin ingin keluar dari dashboard?</p>
+          <div class="flex justify-end gap-3">
+            <button id="batal-keluar" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded">
+              Batal
+            </button>
+            <a href="/login.html" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white"
+              >Keluar</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Edit Kamera -->
+      <div
+        id="modal-edit-kamera"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+      >
+        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-md">
+          <h3 class="text-lg font-semibold mb-4">Edit Kamera</h3>
+          <form class="space-y-4">
+            <div>
+              <label class="block text-sm mb-1">Nama Kamera</label>
+              <input
+                type="text"
+                class="w-full p-2 rounded bg-neutral-700 text-white border border-neutral-600"
+                placeholder="Kamera Samping"
+              />
+            </div>
+            <div>
+              <label class="block text-sm mb-1">URL Kamera</label>
+              <input
+                type="text"
+                class="w-full p-2 rounded bg-neutral-700 text-white border border-neutral-600"
+                placeholder="http://stream.example.com"
+              />
+            </div>
+            <div class="flex justify-end gap-2">
+              <button
+                type="button"
+                id="cancel-edit-kamera"
+                class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded"
+              >
+                Batal
+              </button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded">
+                Simpan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal Disconnect Kamera -->
+      <div
+        id="modal-disconnect"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+      >
+        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-sm">
+          <h3 class="text-lg font-semibold mb-4">Putuskan Koneksi Kamera</h3>
+          <p class="mb-4 text-sm">Apakah Anda yakin ingin memutuskan koneksi kamera ini?</p>
+          <div class="flex justify-end gap-3">
+            <button
+              id="batal-disconnect"
+              class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded"
+            >
+              Batal
+            </button>
+            <button class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white">
+              Putuskan
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Modal Edit
+      const editButtons = document.querySelectorAll('.fa-pen-to-square');
+      const modalEdit = document.getElementById('modal-edit-kamera');
+      const cancelEdit = document.getElementById('cancel-edit-kamera');
+      editButtons.forEach((btn) =>
+        btn.addEventListener('click', () => modalEdit.classList.remove('hidden'))
+      );
+      cancelEdit.addEventListener('click', () => modalEdit.classList.add('hidden'));
+      modalEdit.addEventListener('click', (e) => {
+        if (e.target === modalEdit) modalEdit.classList.add('hidden');
+      });
+
+      // Modal Disconnect
+      const disconnectButtons = document.querySelectorAll('.fa-plug-circle-xmark');
+      const modalDisconnect = document.getElementById('modal-disconnect');
+      const cancelDisconnect = document.getElementById('batal-disconnect');
+      disconnectButtons.forEach((btn) =>
+        btn.addEventListener('click', () => modalDisconnect.classList.remove('hidden'))
+      );
+      cancelDisconnect.addEventListener('click', () => modalDisconnect.classList.add('hidden'));
+      modalDisconnect.addEventListener('click', (e) => {
+        if (e.target === modalDisconnect) modalDisconnect.classList.add('hidden');
+      });
+    </script>
+
+    <script>
+      const keluarLink =
+        document.querySelector("a[href='#logout']") || document.getElementById('keluar-link');
+      const modalKeluar = document.getElementById('modal-keluar');
+      const batalKeluar = document.getElementById('batal-keluar');
+
+      if (keluarLink) {
+        keluarLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          modalKeluar.classList.remove('hidden');
+        });
+      }
+
+      batalKeluar.addEventListener('click', () => {
+        modalKeluar.classList.add('hidden');
+      });
+
+      modalKeluar.addEventListener('click', (e) => {
+        if (e.target === modalKeluar) {
+          modalKeluar.classList.add('hidden');
+        }
+      });
+    </script>
+
+    <script>
+      const hamburger = document.getElementById('hamburger');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+
+      hamburger.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+      });
+
+      overlay.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      });
+    </script>
+
+    <script>
+      const modal = document.getElementById('modal-kamera');
+      const openModal = document.querySelector('.cursor-pointer'); // tombol "+ Tambah Kamera"
+      const closeModalBtn = document.getElementById('close-modal');
+      const cancelModalBtn = document.getElementById('batal-modal');
+
+      openModal.addEventListener('click', () => modal.classList.remove('hidden'));
+      closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      cancelModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+      // Optional: klik luar modal untuk tutup
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+    </script>
+
+    <script>
+      document.querySelectorAll('nav a').forEach((item) => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('nav a').forEach((i) => {
+            i.classList.remove('bg-neutral-900');
+            const img = i.querySelector('img');
+            if (img) img.src = img.src.replace('-green', '');
+            const span = i.querySelector('span');
+            if (span) span.classList.remove('text-emerald-400');
+          });
+          item.classList.add('bg-neutral-900');
+          const img = item.querySelector('img');
+          if (img) img.src = img.src.replace('.png', '-green.png');
+          const span = item.querySelector('span');
+          if (span) span.classList.add('text-emerald-400');
+        });
+      });
+    </script>
+  </body>
+</html>
