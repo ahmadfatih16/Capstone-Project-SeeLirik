@@ -1,5 +1,3 @@
-//riwayat-page.js
-
 import MobileNavbar, { initMobileNavbar } from '../../components/mobile-navbar.js';
 import Sidebar from '../../components/sidebar.js';
 import DateTime, { initDateTime } from '../../components/datetime.js';
@@ -60,8 +58,8 @@ export default class RiwayatPage {
   updateRiwayatTable(data) {
     const tableBody = document.getElementById('riwayat-table-body');
     if (tableBody) {
-      tableBody.innerHTML = data.map(item => `
-        <tr class="hover:bg-neutral-800 transition cursor-pointer" onclick="location.href='detail-riwayat-page.html'">
+      tableBody.innerHTML = data.map((item, index) => `
+        <tr class="hover:bg-neutral-800 transition cursor-pointer" data-activity-id="${item.id || index}" data-activity='${JSON.stringify(item)}'>
           <td class="px-4 py-3">${item.tanggal}</td>
           <td class="px-4 py-3">${item.waktu}</td>
           <td class="px-4 py-3">${item.kamera}</td>
@@ -73,7 +71,28 @@ export default class RiwayatPage {
           </td>
         </tr>
       `).join('');
+
+      // Add click event listeners to table rows
+      this.addTableRowClickListeners();
     }
+  }
+
+  // Method untuk menambahkan event listener pada baris tabel
+  addTableRowClickListeners() {
+    const tableRows = document.querySelectorAll('#riwayat-table-body tr[data-activity-id]');
+    tableRows.forEach(row => {
+      row.addEventListener('click', (e) => {
+        const activityData = JSON.parse(row.getAttribute('data-activity'));
+        const activityId = row.getAttribute('data-activity-id');
+        
+        // Store activity data in sessionStorage for detail page
+        sessionStorage.setItem('selectedActivityData', JSON.stringify(activityData));
+        sessionStorage.setItem('selectedActivityId', activityId);
+        
+        // Navigate to detail page
+        window.location.hash = '#/detail-riwayat';
+      });
+    });
   }
 
   // Method untuk menampilkan loading state
@@ -119,5 +138,14 @@ export default class RiwayatPage {
         </tr>
       `;
     }
+  }
+
+  // Method untuk cleanup ketika page di-destroy
+  destroy() {
+    // Remove event listeners if needed
+    const tableRows = document.querySelectorAll('#riwayat-table-body tr[data-activity-id]');
+    tableRows.forEach(row => {
+      row.removeEventListener('click', () => {});
+    });
   }
 }
