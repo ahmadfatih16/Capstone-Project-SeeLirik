@@ -7,6 +7,8 @@ import ModalLogout from '../../components/modal/modal-logout.js';
 export default class MonitoringPage {
   constructor() {
     this.presenter = null;
+    this.webcamStream = null; // Store active webcam stream
+    this.webcamVideo = null; // Store video element reference
   }
 
   async render() {
@@ -76,13 +78,39 @@ export default class MonitoringPage {
         id="modal-kamera"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
       >
-        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-md shadow-xl">
+        <div class="bg-neutral-800 rounded-lg p-6 w-full max-w-lg shadow-xl">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-semibold text-white">Tambah Kamera</h3>
             <button id="close-modal" class="text-white text-xl hover:text-red-500">
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
+          
+          <!-- Webcam Preview -->
+          <div id="webcam-container" class="mb-4">
+            <video 
+              id="webcam-preview" 
+              class="w-full aspect-video bg-neutral-700 rounded-md"
+              autoplay 
+              muted 
+              playsinline
+            ></video>
+            <div class="flex justify-center gap-2 mt-2">
+              <button 
+                id="start-webcam-btn" 
+                class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 rounded text-white text-sm"
+              >
+                Mulai Webcam
+              </button>
+              <button 
+                id="stop-webcam-btn" 
+                class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-white text-sm hidden"
+              >
+                Hentikan Webcam
+              </button>
+            </div>
+          </div>
+
           <form id="add-camera-form" class="space-y-4">
             <div>
               <label for="nama-kamera" class="block mb-1 text-sm text-white">Nama Kamera</label>
@@ -98,6 +126,7 @@ export default class MonitoringPage {
                 type="text"
                 id="url-kamera"
                 class="w-full p-2 rounded-md bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Kosongkan untuk menggunakan webcam"
               />
             </div>
             <div class="flex justify-end space-x-3">
@@ -190,6 +219,63 @@ export default class MonitoringPage {
     `;
   }
 
+  // Initialize webcam functionality
+  async initWebcam() {
+    const startBtn = document.getElementById('start-webcam-btn');
+    const stopBtn = document.getElementById('stop-webcam-btn');
+    const webcamVideo = document.getElementById('webcam-preview');
+
+    if (!startBtn || !stopBtn || !webcamVideo) return;
+
+    this.webcamVideo = webcamVideo;
+
+    startBtn.addEventListener('click', async () => {
+      try {
+        // Request webcam access
+        this.webcamStream = await navigator.mediaDevices.getUserMedia({ 
+          video: true, 
+          audio: false 
+        });
+        
+        // Set video source to webcam stream
+        webcamVideo.srcObject = this.webcamStream;
+        
+        // Toggle button visibility
+        startBtn.classList.add('hidden');
+        stopBtn.classList.remove('hidden');
+        
+        console.log('Webcam started successfully');
+      } catch (error) {
+        console.error('Error accessing webcam:', error);
+        alert('Tidak dapat mengakses webcam. Pastikan webcam terhubung dan izin diberikan.');
+      }
+    });
+
+    stopBtn.addEventListener('click', () => {
+      this.stopWebcam();
+      startBtn.classList.remove('hidden');
+      stopBtn.classList.add('hidden');
+    });
+  }
+
+  // Stop webcam stream
+  stopWebcam() {
+    if (this.webcamStream) {
+      // Stop all tracks
+      this.webcamStream.getTracks().forEach(track => {
+        track.stop();
+      });
+      
+      // Clear video source
+      if (this.webcamVideo) {
+        this.webcamVideo.srcObject = null;
+      }
+      
+      this.webcamStream = null;
+      console.log('Webcam stopped');
+    }
+  }
+
   initAddCameraModal() {
     const modal = document.getElementById('modal-kamera');
     const openModal = document.getElementById('add-camera-btn');
@@ -199,19 +285,32 @@ export default class MonitoringPage {
 
     if (!modal || !openModal) return;
 
-    openModal.addEventListener('click', () => modal.classList.remove('hidden'));
+    openModal.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      // Initialize webcam functionality when modal opens
+      setTimeout(() => this.initWebcam(), 100);
+    });
     
     if (closeModalBtn) {
-      closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      closeModalBtn.addEventListener('click', () => {
+        this.stopWebcam();
+        modal.classList.add('hidden');
+      });
     }
     
     if (cancelModalBtn) {
-      cancelModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      cancelModalBtn.addEventListener('click', () => {
+        this.stopWebcam();
+        modal.classList.add('hidden');
+      });
     }
 
     // Close modal when clicking outside
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.add('hidden');
+      if (e.target === modal) {
+        this.stopWebcam();
+        modal.classList.add('hidden');
+      }
     });
 
     // Handle form submission
@@ -219,6 +318,7 @@ export default class MonitoringPage {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         this.handleAddCamera();
+        this.stopWebcam();
         modal.classList.add('hidden');
       });
     }
@@ -317,7 +417,8 @@ export default class MonitoringPage {
     
     const cameraData = {
       name: nameInput?.value || '',
-      url: urlInput?.value || ''
+      url: urlInput?.value || 'webcam', // Use 'webcam' as identifier if URL is empty
+      isWebcam: !urlInput?.value // Flag to identify webcam cameras
     };
 
     console.log('Adding camera:', cameraData);
@@ -352,8 +453,18 @@ export default class MonitoringPage {
     // Implement your disconnect camera logic here
   }
 
+  // Cleanup method to stop webcam when leaving page
+  cleanup() {
+    this.stopWebcam();
+  }
+
   async afterRender() {
     try {
+      // Initialize modal functionality
+      this.initAddCameraModal();
+      this.initEditCameraModal();
+      this.initDisconnectModal();
+
       // Dynamic import presenter
       const { default: MonitoringPresenter } = await import('./monitoring-presenter.js');
       this.presenter = MonitoringPresenter;
@@ -364,6 +475,18 @@ export default class MonitoringPage {
       // Listen for camera updates
       document.addEventListener('camerasUpdated', (e) => {
         this.refreshCameraGrid();
+      });
+
+      // Add page unload event listener to cleanup webcam
+      window.addEventListener('beforeunload', () => {
+        this.cleanup();
+      });
+
+      // Add visibility change event listener (for tab switching)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.stopWebcam();
+        }
       });
       
     } catch (error) {
@@ -377,27 +500,9 @@ export default class MonitoringPage {
   initBasicFunctionality() {
     console.log('Using basic functionality without presenter');
     // Initialize basic components
-    this.initBasicModal();
-  }
-
-  initBasicModal() {
-    // Basic modal functionality
-    const modal = document.getElementById('modal-kamera');
-    const openModal = document.getElementById('add-camera-btn');
-    const closeModalBtn = document.getElementById('close-modal');
-    const cancelModalBtn = document.getElementById('batal-modal');
-
-    if (openModal && modal) {
-      openModal.addEventListener('click', () => modal.classList.remove('hidden'));
-    }
-    
-    if (closeModalBtn && modal) {
-      closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    }
-    
-    if (cancelModalBtn && modal) {
-      cancelModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    }
+    this.initAddCameraModal();
+    this.initEditCameraModal();
+    this.initDisconnectModal();
   }
 
   // Method untuk refresh camera grid
