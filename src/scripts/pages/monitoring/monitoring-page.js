@@ -8,6 +8,7 @@ export default class MonitoringPage {
     this.presenter = null;
     this.webcamStream = null; // Store active webcam stream
     this.webcamVideo = null; // Store video element reference
+    this.selectedWebcamDeviceId = null; // Store the selected webcam device ID
   }
 
   async render() {
@@ -49,10 +50,13 @@ export default class MonitoringPage {
 
     return cameras.map(camera => `
       <div class="bg-neutral-800 rounded-md overflow-hidden">
-        <video controls class="w-full aspect-video rounded-sm">
-          <source src="${camera.url}" type="video/mp4" />
-          Browser tidak mendukung video.
-        </video>
+        ${camera.isWebcam && camera.url === 'webcam' 
+          ? `<video id="live-webcam-${camera.id}" autoplay muted playsinline class="w-full aspect-video rounded-sm"></video>`
+          : `<video controls class="w-full aspect-video rounded-sm">
+              <source src="${camera.url}" type="video/mp4" />
+              Browser tidak mendukung video.
+            </video>`
+        }
         <div class="flex justify-between items-center px-4 py-2">
           <span class="text-sm sm:text-base text-white">${camera.name}</span>
           <div class="flex gap-2 text-white">
@@ -119,12 +123,21 @@ export default class MonitoringPage {
               />
             </div>
             <div>
+              <label for="webcam-select" class="block mb-1 text-sm text-white">Pilih Webcam</label>
+              <select
+                id="webcam-select"
+                class="w-full p-2 rounded-md bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="">-- Pilih Webcam (Opsional) --</option>
+              </select>
+            </div>
+            <div>
               <label for="url-kamera" class="block mb-1 text-sm text-white">URL Video / Stream</label>
               <input
                 type="text"
                 id="url-kamera"
                 class="w-full p-2 rounded-md bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Kosongkan untuk menggunakan webcam"
+                placeholder="Kosongkan untuk menggunakan webcam yang dipilih"
               />
             </div>
             <div class="flex justify-end space-x-3">
@@ -220,53 +233,98 @@ export default class MonitoringPage {
     const startBtn = document.getElementById('start-webcam-btn');
     const stopBtn = document.getElementById('stop-webcam-btn');
     const webcamVideo = document.getElementById('webcam-preview');
+    const webcamSelect = document.getElementById('webcam-select');
+    const urlInput = document.getElementById('url-kamera');
 
-    if (!startBtn || !stopBtn || !webcamVideo) return;
+    if (!startBtn || !stopBtn || !webcamVideo || !webcamSelect || !urlInput) return;
 
     this.webcamVideo = webcamVideo;
 
-    startBtn.addEventListener('click', async () => {
-      try {
-        // Request webcam access
-        this.webcamStream = await navigator.mediaDevices.getUserMedia({ 
-          video: true, 
-          audio: false 
-        });
-        
-        // Set video source to webcam stream
-        webcamVideo.srcObject = this.webcamStream;
-        
-        // Toggle button visibility
-        startBtn.classList.add('hidden');
-        stopBtn.classList.remove('hidden');
-        
-        console.log('Webcam started successfully');
-      } catch (error) {
-        console.error('Error accessing webcam:', error);
-        alert('Tidak dapat mengakses webcam. Pastikan webcam terhubung dan izin diberikan.');
+    // Populate webcam devices
+    await this.populateWebcamDevices();
+
+    // Event listener for webcam selection
+    webcamSelect.addEventListener('change', () => {
+      this.selectedWebcamDeviceId = webcamSelect.value;
+      if (this.selectedWebcamDeviceId) {
+        urlInput.value = ''; // Clear URL input if webcam is selected
+        urlInput.disabled = true; // Disable URL input
+        this.startWebcam(this.selectedWebcamDeviceId); // Start webcam with selected device
+      } else {
+        urlInput.disabled = false; // Enable URL input if no webcam is selected
+        this.stopWebcam();
       }
+    });
+
+    startBtn.addEventListener('click', async () => {
+      if (!this.selectedWebcamDeviceId) {
+        alert('Please select a webcam first.');
+        return;
+      }
+      this.startWebcam(this.selectedWebcamDeviceId);
+      startBtn.classList.add('hidden');
+      stopBtn.classList.remove('hidden');
+      urlInput.disabled = true; // Disable URL input when webcam is active
     });
 
     stopBtn.addEventListener('click', () => {
       this.stopWebcam();
       startBtn.classList.remove('hidden');
       stopBtn.classList.add('hidden');
+      urlInput.disabled = false; // Enable URL input when webcam is stopped
     });
+  }
+
+  // Populate the select dropdown with available webcam devices
+  async populateWebcamDevices() {
+    const webcamSelect = document.getElementById('webcam-select');
+    webcamSelect.innerHTML = '<option value="">-- Pilih Webcam (Opsional) --</option>'; // Reset options
+
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+      videoDevices.forEach(device => {
+        const option = document.createElement('option');
+        option.value = device.deviceId;
+        option.textContent = device.label || `Camera ${webcamSelect.options.length}`;
+        webcamSelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error enumerating devices:', error);
+      alert('Tidak dapat mengakses daftar webcam.');
+    }
+  }
+
+  // Start webcam stream
+  async startWebcam(deviceId) {
+    this.stopWebcam(); // Stop any existing stream first
+
+    try {
+      const constraints = {
+        video: { deviceId: deviceId ? { exact: deviceId } : undefined },
+        audio: false
+      };
+      this.webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
+      this.webcamVideo.srcObject = this.webcamStream;
+      console.log('Webcam started successfully');
+    } catch (error) {
+      console.error('Error accessing webcam:', error);
+      alert('Tidak dapat mengakses webcam. Pastikan webcam terhubung dan izin diberikan.');
+      // Re-enable URL input if webcam fails to start
+      document.getElementById('url-kamera').disabled = false;
+    }
   }
 
   // Stop webcam stream
   stopWebcam() {
     if (this.webcamStream) {
-      // Stop all tracks
       this.webcamStream.getTracks().forEach(track => {
         track.stop();
       });
-      
-      // Clear video source
       if (this.webcamVideo) {
         this.webcamVideo.srcObject = null;
       }
-      
       this.webcamStream = null;
       console.log('Webcam stopped');
     }
@@ -278,12 +336,22 @@ export default class MonitoringPage {
     const closeModalBtn = document.getElementById('close-modal');
     const cancelModalBtn = document.getElementById('batal-modal');
     const form = document.getElementById('add-camera-form');
+    const urlInput = document.getElementById('url-kamera');
+    const webcamSelect = document.getElementById('webcam-select');
 
     if (!modal || !openModal) return;
 
     openModal.addEventListener('click', () => {
       modal.classList.remove('hidden');
-      // Initialize webcam functionality when modal opens
+      // Reset form and webcam state when opening modal
+      if (form) form.reset();
+      this.stopWebcam();
+      document.getElementById('start-webcam-btn').classList.remove('hidden');
+      document.getElementById('stop-webcam-btn').classList.add('hidden');
+      urlInput.disabled = false; // Ensure URL input is enabled initially
+      webcamSelect.value = ''; // Reset webcam selection
+      this.selectedWebcamDeviceId = null;
+      
       setTimeout(() => this.initWebcam(), 100);
     });
     
@@ -406,7 +474,6 @@ export default class MonitoringPage {
     const urlInput = document.getElementById('edit-url-kamera');
     
     // Pre-fill form with current camera data (you can implement this based on your data structure)
-    // For demonstration, using dummy data. In a real app, you'd fetch this from your camera data.
     const cameras = this.presenter ? this.presenter.getCameras() : [
       { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4' },
       { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4' },
@@ -439,26 +506,38 @@ export default class MonitoringPage {
   handleAddCamera() {
     const nameInput = document.getElementById('nama-kamera');
     const urlInput = document.getElementById('url-kamera');
+    const webcamSelect = document.getElementById('webcam-select');
     
+    let cameraUrl = urlInput?.value || '';
+    let isWebcam = false;
+
+    if (webcamSelect?.value && !urlInput?.value) {
+        cameraUrl = webcamSelect.value; // Use deviceId as URL for webcam
+        isWebcam = true;
+    }
+
     const cameraData = {
       name: nameInput?.value || '',
-      url: urlInput?.value || 'webcam', // Use 'webcam' as identifier if URL is empty
-      isWebcam: !urlInput?.value // Flag to identify webcam cameras
+      url: cameraUrl,
+      isWebcam: isWebcam,
+      deviceId: isWebcam ? webcamSelect.value : undefined // Store device ID if it's a webcam
     };
 
     console.log('Adding camera:', cameraData);
-    // Implement your add camera logic here (e.g., call presenter method)
     if (this.presenter && typeof this.presenter.addCamera === 'function') {
       this.presenter.addCamera(cameraData);
     } else {
       console.warn('Presenter not available or addCamera method not found.');
-      // If presenter is not available, you might want to manually update the UI or
-      // dispatch a custom event that a global state manager can listen to.
     }
     
-    // Clear form
+    // Clear form and reset webcam state
     if (nameInput) nameInput.value = '';
-    if (urlInput) urlInput.value = '';
+    if (urlInput) {
+      urlInput.value = '';
+      urlInput.disabled = false; // Re-enable URL input after submission
+    }
+    if (webcamSelect) webcamSelect.value = '';
+    this.selectedWebcamDeviceId = null;
   }
 
   handleEditCamera() {
@@ -474,7 +553,6 @@ export default class MonitoringPage {
     };
 
     console.log('Editing camera:', cameraData);
-    // Implement your edit camera logic here (e.g., call presenter method)
     if (this.presenter && typeof this.presenter.editCamera === 'function') {
       this.presenter.editCamera(cameraData);
     } else {
@@ -487,7 +565,6 @@ export default class MonitoringPage {
     const cameraId = modal.dataset.cameraId;
     
     console.log('Disconnecting camera:', cameraId);
-    // Implement your disconnect camera logic here (e.g., call presenter method)
     if (this.presenter && typeof this.presenter.disconnectCamera === 'function') {
       this.presenter.disconnectCamera(parseInt(cameraId)); // Ensure ID is a number
     } else {
@@ -527,6 +604,7 @@ export default class MonitoringPage {
       // Listen for camera updates
       document.addEventListener('camerasUpdated', (e) => {
         this.refreshCameraGrid();
+        this.startLiveWebcamFeeds(); // Start live feeds for new webcams
       });
 
       // Add page unload event listener to cleanup webcam
@@ -541,6 +619,9 @@ export default class MonitoringPage {
         }
       });
       
+      // Start live webcam feeds on initial load
+      this.startLiveWebcamFeeds();
+
     } catch (error) {
       console.error('Failed to load presenter:', error);
       // Fallback: initialize basic functionality
@@ -563,6 +644,32 @@ export default class MonitoringPage {
     const cameraGrid = document.querySelector('.grid');
     if (cameraGrid) {
       cameraGrid.innerHTML = this.renderCameraCards();
+      this.startLiveWebcamFeeds(); // Re-start webcam feeds after refreshing the grid
+    }
+  }
+
+  // Method to start live webcam feeds for all added webcam cameras
+  async startLiveWebcamFeeds() {
+    const cameras = this.presenter ? this.presenter.getCameras() : [];
+    const webcamCameras = cameras.filter(camera => camera.isWebcam && camera.deviceId);
+
+    for (const camera of webcamCameras) {
+      const videoElement = document.getElementById(`live-webcam-${camera.id}`);
+      if (videoElement && !videoElement.srcObject) { // Only start if not already streaming
+        try {
+          const constraints = {
+            video: { deviceId: { exact: camera.deviceId } },
+            audio: false
+          };
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          videoElement.srcObject = stream;
+          videoElement.play();
+          console.log(`Live stream for camera ${camera.name} (${camera.id}) started.`);
+        } catch (error) {
+          console.error(`Error starting live stream for camera ${camera.name} (${camera.id}):`, error);
+          // Optionally, display an error message on the card
+        }
+      }
     }
   }
 }
