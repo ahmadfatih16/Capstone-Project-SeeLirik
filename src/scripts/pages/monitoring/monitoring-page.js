@@ -1,4 +1,3 @@
-//monitoring-page.js
 import MobileNavbar from '../../components/mobile-navbar.js';
 import Sidebar from '../../components/sidebar.js';
 import DateTime from '../../components/datetime.js';
@@ -19,11 +18,10 @@ export default class MonitoringPage {
       ${this.renderAddCameraModal()}
       ${this.renderEditCameraModal()}
       ${this.renderDisconnectModal()}
-       
+        
       <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
         ${DateTime()}
         
-        <!-- Tombol Tambah Kamera -->
         <div
           id="add-camera-btn"
           class="w-full bg-emerald-600 rounded-md py-2 px-4 text-center mb-6 text-white font-semibold cursor-pointer hover:bg-emerald-800 transition"
@@ -31,7 +29,6 @@ export default class MonitoringPage {
           + Tambah Kamera
         </div>
 
-        <!-- Grid Kamera -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8">
           ${this.renderCameraCards()}
         </div>
@@ -59,6 +56,9 @@ export default class MonitoringPage {
         <div class="flex justify-between items-center px-4 py-2">
           <span class="text-sm sm:text-base text-white">${camera.name}</span>
           <div class="flex gap-2 text-white">
+            <button class="hover:text-emerald-400 preview-camera-btn" data-camera-id="${camera.id}" data-camera-url="${camera.url}">
+              <i class="fa-solid fa-eye"></i>
+            </button>
             <button class="hover:text-yellow-400 edit-camera-btn" data-camera-id="${camera.id}">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
@@ -73,7 +73,6 @@ export default class MonitoringPage {
 
   renderAddCameraModal() {
     return `
-      <!-- Modal Tambah Kamera -->
       <div
         id="modal-kamera"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
@@ -86,7 +85,6 @@ export default class MonitoringPage {
             </button>
           </div>
           
-          <!-- Webcam Preview -->
           <div id="webcam-container" class="mb-4">
             <video 
               id="webcam-preview" 
@@ -149,7 +147,6 @@ export default class MonitoringPage {
 
   renderEditCameraModal() {
     return `
-      <!-- Modal Edit Kamera -->
       <div
         id="modal-edit-kamera"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
@@ -195,7 +192,6 @@ export default class MonitoringPage {
 
   renderDisconnectModal() {
     return `
-      <!-- Modal Disconnect Kamera -->
       <div
         id="modal-disconnect"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
@@ -392,15 +388,44 @@ export default class MonitoringPage {
     });
   }
 
+  // New method to initialize preview button
+  initPreviewCamera() {
+    document.addEventListener('click', (e) => {
+      const previewButton = e.target.closest('.preview-camera-btn');
+      if (previewButton) {
+        const cameraId = previewButton.dataset.cameraId;
+        const cameraUrl = previewButton.dataset.cameraUrl; // Get the camera URL
+        this.handlePreviewCamera(cameraId, cameraUrl);
+      }
+    });
+  }
+
   openEditModal(cameraId) {
     const modal = document.getElementById('modal-edit-kamera');
     const nameInput = document.getElementById('edit-nama-kamera');
     const urlInput = document.getElementById('edit-url-kamera');
     
     // Pre-fill form with current camera data (you can implement this based on your data structure)
-    if (nameInput) nameInput.value = 'Kamera Samping';
-    if (urlInput) urlInput.value = '../../../public/video/contoh.mp4';
-    
+    // For demonstration, using dummy data. In a real app, you'd fetch this from your camera data.
+    const cameras = this.presenter ? this.presenter.getCameras() : [
+      { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4' },
+      { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4' },
+      { id: 3, name: 'Kamera Samping', url: '../../../public/video/contoh.mp4' },
+      { id: 4, name: 'Kamera Garasi', url: '../../../public/video/contoh.mp4' },
+      { id: 5, name: 'Kamera Taman', url: '../../../public/video/contoh.mp4' },
+      { id: 6, name: 'Kamera Ruang Tamu', url: '../../../public/video/contoh.mp4' }
+    ];
+    const cameraToEdit = cameras.find(camera => camera.id == cameraId);
+
+    if (cameraToEdit) {
+      if (nameInput) nameInput.value = cameraToEdit.name;
+      if (urlInput) urlInput.value = cameraToEdit.url;
+    } else {
+      // Fallback if camera not found (e.g., initial load with default data)
+      if (nameInput) nameInput.value = '';
+      if (urlInput) urlInput.value = '';
+    }
+
     modal.classList.remove('hidden');
     modal.dataset.cameraId = cameraId;
   }
@@ -422,7 +447,14 @@ export default class MonitoringPage {
     };
 
     console.log('Adding camera:', cameraData);
-    // Implement your add camera logic here
+    // Implement your add camera logic here (e.g., call presenter method)
+    if (this.presenter && typeof this.presenter.addCamera === 'function') {
+      this.presenter.addCamera(cameraData);
+    } else {
+      console.warn('Presenter not available or addCamera method not found.');
+      // If presenter is not available, you might want to manually update the UI or
+      // dispatch a custom event that a global state manager can listen to.
+    }
     
     // Clear form
     if (nameInput) nameInput.value = '';
@@ -436,13 +468,18 @@ export default class MonitoringPage {
     const urlInput = document.getElementById('edit-url-kamera');
     
     const cameraData = {
-      id: cameraId,
+      id: parseInt(cameraId), // Ensure ID is a number
       name: nameInput?.value || '',
       url: urlInput?.value || ''
     };
 
     console.log('Editing camera:', cameraData);
-    // Implement your edit camera logic here
+    // Implement your edit camera logic here (e.g., call presenter method)
+    if (this.presenter && typeof this.presenter.editCamera === 'function') {
+      this.presenter.editCamera(cameraData);
+    } else {
+      console.warn('Presenter not available or editCamera method not found.');
+    }
   }
 
   handleDisconnectCamera() {
@@ -450,7 +487,21 @@ export default class MonitoringPage {
     const cameraId = modal.dataset.cameraId;
     
     console.log('Disconnecting camera:', cameraId);
-    // Implement your disconnect camera logic here
+    // Implement your disconnect camera logic here (e.g., call presenter method)
+    if (this.presenter && typeof this.presenter.disconnectCamera === 'function') {
+      this.presenter.disconnectCamera(parseInt(cameraId)); // Ensure ID is a number
+    } else {
+      console.warn('Presenter not available or disconnectCamera method not found.');
+    }
+  }
+
+  // Updated method to handle preview button click
+  handlePreviewCamera(cameraId, cameraUrl) {
+    console.log('Navigating to preview for camera:', cameraId, 'with URL:', cameraUrl);
+    // Encode the URL to pass it safely through the hash
+    const encodedUrl = encodeURIComponent(cameraUrl);
+    // Use window.location.hash to navigate to the preview page with camera ID and URL
+    window.location.hash = `#/preview/${cameraId}?url=${encodedUrl}`;
   }
 
   // Cleanup method to stop webcam when leaving page
@@ -464,13 +515,14 @@ export default class MonitoringPage {
       this.initAddCameraModal();
       this.initEditCameraModal();
       this.initDisconnectModal();
+      this.initPreviewCamera(); // Initialize the new preview button
 
       // Dynamic import presenter
       const { default: MonitoringPresenter } = await import('./monitoring-presenter.js');
       this.presenter = MonitoringPresenter;
       
       // Initialize presenter
-      this.presenter.init();
+      this.presenter.init(this); // Pass this (view instance) to the presenter
       
       // Listen for camera updates
       document.addEventListener('camerasUpdated', (e) => {
@@ -503,6 +555,7 @@ export default class MonitoringPage {
     this.initAddCameraModal();
     this.initEditCameraModal();
     this.initDisconnectModal();
+    this.initPreviewCamera(); // Initialize the new preview button
   }
 
   // Method untuk refresh camera grid

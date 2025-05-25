@@ -5,6 +5,7 @@ import MonitoringPage from '../pages/monitoring/monitoring-page.js';
 import RiwayatPage from '../pages/riwayat/riwayat-page.js';
 import AkunPage from '../pages/akun/akun-page.js';
 import DetailRiwayatPage from '../pages/detail-riwayat/detail-riwayat-page.js';
+import PreviewPage from '../pages/preview/preview-page.js';
 
 const routes = {
   '/': () => new LandingPage(),
@@ -14,6 +15,7 @@ const routes = {
   '/riwayat': () => new RiwayatPage(),
   '/akun': () => new AkunPage(),
   '/detail-riwayat': () => new DetailRiwayatPage(),
+  '/preview': () => new PreviewPage(),
 };
 
 export default routes;
