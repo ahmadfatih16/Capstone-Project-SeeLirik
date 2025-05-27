@@ -13,7 +13,7 @@ export default class DetailRiwayatPage {
 
   async render() {
     const activityData = this.presenter.getActivityData();
-    
+
     // Validasi data dan fallback
     const safeActivityData = {
       date: activityData.date || 'Tidak tersedia',
@@ -23,12 +23,13 @@ export default class DetailRiwayatPage {
       activity: activityData.activity || 'Tidak ada deskripsi aktivitas',
       alarmStatus: activityData.alarmStatus || 'tidak diketahui',
       photoEvidence: activityData.photoEvidence || '/api/placeholder/400/300',
-      videoEvidence: activityData.videoEvidence
+      videoEvidence: activityData.videoEvidence,
     };
-    
+
     return `
       ${MobileNavbar()}
-      ${Sidebar()}
+      ${await Sidebar()}
+
       ${ModalLogout()}
 
       <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
@@ -65,14 +66,17 @@ export default class DetailRiwayatPage {
           <div class="bg-neutral-800 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-2 text-white">Video Rekaman</h3>
             <div id="video-container">
-              ${safeActivityData.videoEvidence ? `
+              ${
+                safeActivityData.videoEvidence
+                  ? `
                 <video id="evidence-video" controls class="w-full aspect-video rounded-lg bg-neutral-900" preload="metadata">
                   <source src="${safeActivityData.videoEvidence}" type="video/mp4" />
                   <div class="flex items-center justify-center h-full bg-neutral-700 text-neutral-300 rounded-lg">
                     Browser tidak mendukung video atau video tidak ditemukan.
                   </div>
                 </video>
-              ` : `
+              `
+                  : `
                 <div class="w-full aspect-video rounded-lg bg-neutral-700 flex items-center justify-center border-2 border-dashed border-neutral-600">
                   <div class="text-center">
                     <svg class="mx-auto h-12 w-12 text-neutral-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +85,8 @@ export default class DetailRiwayatPage {
                     <span class="text-neutral-400 text-sm">Video tidak tersedia</span>
                   </div>
                 </div>
-              `}
+              `
+              }
             </div>
           </div>
         </div>
@@ -130,17 +135,23 @@ export default class DetailRiwayatPage {
                 </span>
               </p>
             </div>
-            ${activityData.confidence ? `
+            ${
+              activityData.confidence
+                ? `
               <div class="space-y-1">
                 <span class="text-neutral-400 text-sm">Confidence Level</span>
                 <p class="font-semibold text-white">${Math.round(activityData.confidence * 100)}%</p>
               </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </div>
 
         <!-- Additional Info Section -->
-        ${activityData.severity ? `
+        ${
+          activityData.severity
+            ? `
           <div class="mt-6 bg-neutral-800 p-4 rounded-lg">
             <h3 class="text-lg font-semibold mb-2 text-white">Informasi Tambahan</h3>
             <div class="flex items-center gap-4">
@@ -154,15 +165,17 @@ export default class DetailRiwayatPage {
               </div>
             </div>
           </div>
-        ` : ''}
+        `
+            : ''
+        }
       </main>
     `;
   }
 
   getAlarmStatusClass(status) {
     if (!status) return 'bg-gray-600';
-    
-    switch(status.toLowerCase()) {
+
+    switch (status.toLowerCase()) {
       case 'aktif':
         return 'bg-emerald-600 hover:bg-emerald-700';
       case 'nonaktif':
@@ -175,7 +188,7 @@ export default class DetailRiwayatPage {
   }
 
   getSeverityClass(severity) {
-    switch(severity?.toLowerCase()) {
+    switch (severity?.toLowerCase()) {
       case 'high':
         return 'bg-red-600';
       case 'medium':
@@ -188,7 +201,7 @@ export default class DetailRiwayatPage {
   }
 
   getSeverityText(severity) {
-    switch(severity?.toLowerCase()) {
+    switch (severity?.toLowerCase()) {
       case 'high':
         return 'Tinggi';
       case 'medium':
@@ -205,13 +218,13 @@ export default class DetailRiwayatPage {
     initDateTime();
     setActiveSidebarLink();
     initModalLogout();
-    
+
     // Initialize presenter
     this.presenter.init();
-    
+
     // Setup page-specific event listeners
     this.setupEventListeners();
-    
+
     // Handle media loading
     this.handleMediaLoading();
   }
@@ -250,7 +263,7 @@ export default class DetailRiwayatPage {
     // Handle photo loading
     const photo = document.getElementById('evidence-photo');
     const photoLoading = document.getElementById('photo-loading');
-    
+
     if (photo && photoLoading) {
       photo.addEventListener('load', () => {
         photoLoading.style.display = 'none';
@@ -310,7 +323,7 @@ export default class DetailRiwayatPage {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     this.showSuccess('Data berhasil diexport');
   }
 
@@ -347,7 +360,8 @@ export default class DetailRiwayatPage {
       }
 
       const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-message bg-red-600 text-white p-4 rounded-lg mb-4 flex items-center justify-between shadow-lg';
+      errorDiv.className =
+        'error-message bg-red-600 text-white p-4 rounded-lg mb-4 flex items-center justify-between shadow-lg';
       errorDiv.innerHTML = `
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,7 +386,8 @@ export default class DetailRiwayatPage {
     const mainContent = document.querySelector('main');
     if (mainContent) {
       const successDiv = document.createElement('div');
-      successDiv.className = 'success-message bg-green-600 text-white p-4 rounded-lg mb-4 flex items-center justify-between shadow-lg';
+      successDiv.className =
+        'success-message bg-green-600 text-white p-4 rounded-lg mb-4 flex items-center justify-between shadow-lg';
       successDiv.innerHTML = `
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -153,18 +153,24 @@
             <!-- Desktop Navigation - Left and Right of Video -->
             <div class="hidden md:flex items-center justify-center gap-6">
               <!-- Left Navigation Button -->
-              <button id="prev-camera" class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all flex-shrink-0">
+              <button
+                id="prev-camera"
+                class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all flex-shrink-0"
+              >
                 <i class="fa-solid fa-chevron-left text-xl"></i>
               </button>
-              
+
               <!-- Video -->
               <video controls class="w-full aspect-video rounded-3xl max-w-5xl">
                 <source src="../../../public/video/contoh.mp4" type="video/mp4" />
                 Browser tidak mendukung video.
               </video>
-              
+
               <!-- Right Navigation Button -->
-              <button id="next-camera" class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all flex-shrink-0">
+              <button
+                id="next-camera"
+                class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all flex-shrink-0"
+              >
                 <i class="fa-solid fa-chevron-right text-xl"></i>
               </button>
             </div>
@@ -176,13 +182,19 @@
                 <source src="../../../public/video/contoh.mp4" type="video/mp4" />
                 Browser tidak mendukung video.
               </video>
-              
+
               <!-- Mobile Navigation Buttons -->
               <div class="flex justify-center gap-4 mb-6">
-                <button id="prev-camera-mobile" class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all">
+                <button
+                  id="prev-camera-mobile"
+                  class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all"
+                >
                   <i class="fa-solid fa-chevron-left text-xl"></i>
                 </button>
-                <button id="next-camera-mobile" class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all">
+                <button
+                  id="next-camera-mobile"
+                  class="bg-neutral-800 hover:bg-neutral-700 text-white p-4 rounded-full transition-all"
+                >
                   <i class="fa-solid fa-chevron-right text-xl"></i>
                 </button>
               </div>
@@ -192,11 +204,17 @@
 
         <!-- Camera Control Buttons -->
         <div class="flex justify-center gap-4">
-          <button id="edit-camera" class="flex items-center gap-2 px-8 py-4 bg-yellow-400 hover:bg-yellow-600 text-white rounded-lg transition-colors text-lg">
+          <button
+            id="edit-camera"
+            class="flex items-center gap-2 px-8 py-4 bg-yellow-400 hover:bg-yellow-600 text-white rounded-lg transition-colors text-lg"
+          >
             <i class="fa-solid fa-edit"></i>
             <span>Edit</span>
           </button>
-          <button id="disconnect-camera" class="flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-lg">
+          <button
+            id="disconnect-camera"
+            class="flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-lg"
+          >
             <i class="fa-solid fa-unlink"></i>
             <span>Disconnect</span>
           </button>
@@ -231,13 +249,21 @@
           <h3 class="text-lg font-semibold mb-4">Edit Kamera</h3>
           <div class="mb-4">
             <label class="block text-sm font-medium mb-2">Nama Kamera</label>
-            <input id="camera-name-input" type="text" class="w-full p-3 bg-neutral-700 rounded-lg text-white" placeholder="Masukkan nama kamera">
+            <input
+              id="camera-name-input"
+              type="text"
+              class="w-full p-3 bg-neutral-700 rounded-lg text-white"
+              placeholder="Masukkan nama kamera"
+            />
           </div>
           <div class="flex justify-end gap-3">
             <button id="batal-edit" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded">
               Batal
             </button>
-            <button id="simpan-edit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded text-white">
+            <button
+              id="simpan-edit"
+              class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded text-white"
+            >
               Simpan
             </button>
           </div>
@@ -253,10 +279,16 @@
           <h3 class="text-lg font-semibold mb-4">Konfirmasi Disconnect</h3>
           <p class="mb-6 text-sm">Apakah Anda yakin ingin memutuskan koneksi kamera ini?</p>
           <div class="flex justify-end gap-3">
-            <button id="batal-disconnect" class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded">
+            <button
+              id="batal-disconnect"
+              class="px-4 py-2 bg-neutral-600 hover:bg-neutral-700 rounded"
+            >
               Batal
             </button>
-            <button id="konfirm-disconnect" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white">
+            <button
+              id="konfirm-disconnect"
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white"
+            >
               Disconnect
             </button>
           </div>

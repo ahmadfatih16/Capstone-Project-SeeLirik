@@ -8,7 +8,7 @@ export default class DetailRiwayatPresenter {
   initializeActivityData() {
     // Try to get data from sessionStorage first
     const savedActivityData = sessionStorage.getItem('selectedActivityData');
-    
+
     if (savedActivityData) {
       try {
         const parsedData = JSON.parse(savedActivityData);
@@ -25,13 +25,13 @@ export default class DetailRiwayatPresenter {
           videoEvidence: parsedData.videoEvidence || './public/video/contoh.mp4',
           id: parsedData.id,
           confidence: parsedData.confidence || 0.95,
-          severity: parsedData.severity || 'high'
+          severity: parsedData.severity || 'high',
         };
       } catch (error) {
         console.error('Error parsing saved activity data:', error);
       }
     }
-    
+
     // Return default data with correct paths
     return this.getDefaultActivityData();
   }
@@ -47,7 +47,7 @@ export default class DetailRiwayatPresenter {
       alarmStatus: 'aktif',
       // Gunakan file yang benar-benar ada
       photoEvidence: this.getAvailableImage(),
-      videoEvidence: this.getAvailableVideo()
+      videoEvidence: this.getAvailableVideo(),
     };
   }
 
@@ -55,11 +55,11 @@ export default class DetailRiwayatPresenter {
   getAvailableImage() {
     // Daftar gambar yang tersedia berdasarkan direktori Anda
     const availableImages = [
-      './public/images/pencurian.jpeg',  // Jika file ini ada
+      './public/images/pencurian.jpeg', // Jika file ini ada
       './public/images/detection.png',
       './public/images/overview.png',
       './public/images/ilustrasi-cctv.png',
-      '/api/placeholder/400/300'  // Fallback placeholder
+      '/api/placeholder/400/300', // Fallback placeholder
     ];
 
     // Return first available image, atau bisa di-customize sesuai kebutuhan
@@ -70,8 +70,8 @@ export default class DetailRiwayatPresenter {
   getAvailableVideo() {
     // Gunakan video yang ada di direktori
     const availableVideos = [
-      './public/video/contoh.mp4',  // Video yang ada di direktori Anda
-      null  // No video fallback
+      './public/video/contoh.mp4', // Video yang ada di direktori Anda
+      null, // No video fallback
     ];
 
     return availableVideos[0];
@@ -82,7 +82,7 @@ export default class DetailRiwayatPresenter {
     this.setupEventListeners();
     this.loadActivityData();
     this.checkMediaAvailability();
-    
+
     // Clear sessionStorage after loading data to prevent stale data
     setTimeout(() => {
       sessionStorage.removeItem('selectedActivityData');
@@ -93,26 +93,27 @@ export default class DetailRiwayatPresenter {
   // Check if media files are available
   async checkMediaAvailability() {
     // Check photo availability
-    if (this.activityData.photoEvidence && !this.activityData.photoEvidence.includes('placeholder')) {
-      this.checkImageExists(this.activityData.photoEvidence)
-        .then(exists => {
-          if (!exists) {
-            console.warn('Photo not found, using placeholder');
-            this.activityData.photoEvidence = '/api/placeholder/400/300';
-            this.updatePhotoInView();
-          }
-        });
+    if (
+      this.activityData.photoEvidence &&
+      !this.activityData.photoEvidence.includes('placeholder')
+    ) {
+      this.checkImageExists(this.activityData.photoEvidence).then((exists) => {
+        if (!exists) {
+          console.warn('Photo not found, using placeholder');
+          this.activityData.photoEvidence = '/api/placeholder/400/300';
+          this.updatePhotoInView();
+        }
+      });
     }
 
     // Check video availability
     if (this.activityData.videoEvidence) {
-      this.checkVideoExists(this.activityData.videoEvidence)
-        .then(exists => {
-          if (!exists) {
-            console.warn('Video not found');
-            this.handleVideoError();
-          }
-        });
+      this.checkVideoExists(this.activityData.videoEvidence).then((exists) => {
+        if (!exists) {
+          console.warn('Video not found');
+          this.handleVideoError();
+        }
+      });
     }
   }
 
@@ -187,10 +188,10 @@ export default class DetailRiwayatPresenter {
       // In the future, this could fetch from an API
       // const data = await this.fetchActivityFromAPI();
       // this.activityData = data;
-      
+
       // Simulate API call delay
       await this.delay(100);
-      
+
       console.log('Activity data loaded:', this.activityData);
     } catch (error) {
       console.error('Error loading activity data:', error);
@@ -243,7 +244,7 @@ export default class DetailRiwayatPresenter {
       const alternatives = [
         './public/images/detection.png',
         './public/images/overview.png',
-        '/api/placeholder/400/320'
+        '/api/placeholder/400/320',
       ];
 
       this.tryAlternativeImages(photoElement, alternatives, 0);
@@ -273,7 +274,7 @@ export default class DetailRiwayatPresenter {
   // Open photo in modal with better error handling
   openPhotoModal() {
     const imgSrc = this.activityData.photoEvidence || '/api/placeholder/400/320';
-    
+
     const modalHTML = `
       <div id="photo-modal" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
         <div class="relative max-w-6xl max-h-full">
@@ -337,18 +338,18 @@ export default class DetailRiwayatPresenter {
 
   // Utility method for delay
   delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // Method to export activity data (e.g., for reports)
   exportActivityData() {
     const dataToExport = {
       ...this.activityData,
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
-    
+
     console.log('Exporting activity data:', dataToExport);
-    
+
     // Could implement actual export functionality here
     // For example, download as JSON or PDF
     return dataToExport;
@@ -358,16 +359,16 @@ export default class DetailRiwayatPresenter {
   markAsReviewed() {
     this.updateActivityData({
       reviewed: true,
-      reviewedAt: new Date().toISOString()
+      reviewedAt: new Date().toISOString(),
     });
-    
+
     console.log('Activity marked as reviewed');
   }
 
   // Method to change alarm status
   changeAlarmStatus(newStatus) {
     const validStatuses = ['aktif', 'nonaktif', 'pending'];
-    
+
     if (!validStatuses.includes(newStatus.toLowerCase())) {
       console.error('Invalid alarm status:', newStatus);
       return false;
@@ -375,7 +376,7 @@ export default class DetailRiwayatPresenter {
 
     this.updateActivityData({
       alarmStatus: newStatus,
-      statusChangedAt: new Date().toISOString()
+      statusChangedAt: new Date().toISOString(),
     });
 
     console.log('Alarm status changed to:', newStatus);
@@ -388,7 +389,7 @@ export default class DetailRiwayatPresenter {
     try {
       // Simulate API delay
       await this.delay(1000);
-      
+
       // Simulate API response with correct paths
       return {
         id: activityId || 1,
@@ -401,7 +402,7 @@ export default class DetailRiwayatPresenter {
         photoEvidence: this.getAvailableImage(),
         videoEvidence: this.getAvailableVideo(),
         confidence: 0.95,
-        severity: 'high'
+        severity: 'high',
       };
     } catch (error) {
       console.error('API fetch error:', error);

@@ -14,7 +14,8 @@ export default class RiwayatPage {
   async render() {
     return `
       ${MobileNavbar()}
-      ${Sidebar()}
+      ${await Sidebar()}
+
       ${ModalLogout()}
 
       <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
@@ -49,7 +50,7 @@ export default class RiwayatPage {
     initDateTime();
     setActiveSidebarLink();
     initModalLogout();
-    
+
     // Initialize presenter
     await this.presenter.init();
   }
@@ -58,7 +59,9 @@ export default class RiwayatPage {
   updateRiwayatTable(data) {
     const tableBody = document.getElementById('riwayat-table-body');
     if (tableBody) {
-      tableBody.innerHTML = data.map((item, index) => `
+      tableBody.innerHTML = data
+        .map(
+          (item, index) => `
         <tr class="hover:bg-neutral-800 transition cursor-pointer" data-activity-id="${item.id || index}" data-activity='${JSON.stringify(item)}'>
           <td class="px-4 py-3">${item.tanggal}</td>
           <td class="px-4 py-3">${item.waktu}</td>
@@ -70,7 +73,9 @@ export default class RiwayatPage {
             </span>
           </td>
         </tr>
-      `).join('');
+      `
+        )
+        .join('');
 
       // Add click event listeners to table rows
       this.addTableRowClickListeners();
@@ -80,15 +85,15 @@ export default class RiwayatPage {
   // Method untuk menambahkan event listener pada baris tabel
   addTableRowClickListeners() {
     const tableRows = document.querySelectorAll('#riwayat-table-body tr[data-activity-id]');
-    tableRows.forEach(row => {
+    tableRows.forEach((row) => {
       row.addEventListener('click', (e) => {
         const activityData = JSON.parse(row.getAttribute('data-activity'));
         const activityId = row.getAttribute('data-activity-id');
-        
+
         // Store activity data in sessionStorage for detail page
         sessionStorage.setItem('selectedActivityData', JSON.stringify(activityData));
         sessionStorage.setItem('selectedActivityId', activityId);
-        
+
         // Navigate to detail page
         window.location.hash = '#/detail-riwayat';
       });
@@ -144,7 +149,7 @@ export default class RiwayatPage {
   destroy() {
     // Remove event listeners if needed
     const tableRows = document.querySelectorAll('#riwayat-table-body tr[data-activity-id]');
-    tableRows.forEach(row => {
+    tableRows.forEach((row) => {
       row.removeEventListener('click', () => {});
     });
   }
