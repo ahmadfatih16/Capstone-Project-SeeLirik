@@ -9,10 +9,14 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-          'style-loader', // diganti di production
+          'style-loader', 
           'css-loader',
           'postcss-loader',
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
       },
     ],
   },
@@ -23,5 +27,10 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js'],
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: 'assets/[hash][ext][query]',
   },
 };

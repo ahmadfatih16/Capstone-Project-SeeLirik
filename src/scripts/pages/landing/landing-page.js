@@ -76,15 +76,15 @@ export default class LandingPage {
   async afterRender() {
     const presenter = (await import('./landing-presenter.js')).default;
     presenter.init();
-    
+
     // Mobile menu toggle functionality
     this.initMobileMenu();
   }
-  
+
   initMobileMenu() {
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     if (menuToggle && mobileMenu) {
       menuToggle.addEventListener('click', () => {
         // Toggle menu visibility with improved positioning
@@ -92,7 +92,7 @@ export default class LandingPage {
           // Show menu
           mobileMenu.classList.remove('top-[-400px]', 'opacity-0', 'z-[-1]');
           mobileMenu.classList.add('top-[80px]', 'opacity-100', 'z-50');
-          
+
           // Change hamburger to close icon
           const icon = menuToggle.querySelector('ion-icon');
           icon.setAttribute('name', 'close');
@@ -100,34 +100,34 @@ export default class LandingPage {
           // Hide menu
           mobileMenu.classList.remove('top-[80px]', 'opacity-100', 'z-50');
           mobileMenu.classList.add('top-[-400px]', 'opacity-0', 'z-[-1]');
-          
+
           // Change close icon back to hamburger
           const icon = menuToggle.querySelector('ion-icon');
           icon.setAttribute('name', 'menu');
         }
       });
-      
+
       // Close menu when clicking on menu links
       const menuLinks = mobileMenu.querySelectorAll('a');
-      menuLinks.forEach(link => {
+      menuLinks.forEach((link) => {
         link.addEventListener('click', () => {
           // Hide menu after clicking a link
           mobileMenu.classList.remove('top-[80px]', 'opacity-100', 'z-50');
           mobileMenu.classList.add('top-[-400px]', 'opacity-0', 'z-[-1]');
-          
+
           // Change close icon back to hamburger
           const icon = menuToggle.querySelector('ion-icon');
           icon.setAttribute('name', 'menu');
         });
       });
-      
+
       // Close menu when clicking outside
       document.addEventListener('click', (e) => {
         if (!menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
           if (mobileMenu.classList.contains('opacity-100')) {
             mobileMenu.classList.remove('top-[80px]', 'opacity-100', 'z-50');
             mobileMenu.classList.add('top-[-400px]', 'opacity-0', 'z-[-1]');
-            
+
             // Change close icon back to hamburger
             const icon = menuToggle.querySelector('ion-icon');
             icon.setAttribute('name', 'menu');

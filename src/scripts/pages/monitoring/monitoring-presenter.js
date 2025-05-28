@@ -8,13 +8,23 @@ const MonitoringPresenter = {
   // Data cameras (bisa diganti dengan API call)
   cameras: [
     { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4', status: 'connected' },
-    { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4', status: 'connected' },
+    {
+      id: 2,
+      name: 'Kamera Belakang',
+      url: '../../../public/video/contoh.mp4',
+      status: 'connected',
+    },
     { id: 3, name: 'Kamera Samping', url: '../../../public/video/contoh.mp4', status: 'connected' },
     { id: 4, name: 'Kamera Garasi', url: '../../../public/video/contoh.mp4', status: 'connected' },
     { id: 5, name: 'Kamera Taman', url: '../../../public/video/contoh.mp4', status: 'connected' },
-    { id: 6, name: 'Kamera Ruang Tamu', url: '../../../public/video/contoh.mp4', status: 'connected' }
+    {
+      id: 6,
+      name: 'Kamera Ruang Tamu',
+      url: '../../../public/video/contoh.mp4',
+      status: 'connected',
+    },
   ],
-  
+
   selectedCameraId: null,
 
   init() {
@@ -45,7 +55,7 @@ const MonitoringPresenter = {
 
   // Get camera by ID
   getCameraById(id) {
-    return this.cameras.find(camera => camera.id === parseInt(id));
+    return this.cameras.find((camera) => camera.id === parseInt(id));
   },
 
   // Add new camera
@@ -54,12 +64,12 @@ const MonitoringPresenter = {
       id: this.cameras.length + 1,
       name: cameraData.name || 'Kamera Baru',
       url: cameraData.url || '',
-      status: 'connected'
+      status: 'connected',
     };
-    
+
     this.cameras.push(newCamera);
     console.log('Camera added:', newCamera);
-    
+
     // Refresh view (bisa trigger re-render)
     this.refreshCameraGrid();
     return newCamera;
@@ -67,34 +77,34 @@ const MonitoringPresenter = {
 
   // Update existing camera
   updateCamera(id, cameraData) {
-    const cameraIndex = this.cameras.findIndex(camera => camera.id === parseInt(id));
-    
+    const cameraIndex = this.cameras.findIndex((camera) => camera.id === parseInt(id));
+
     if (cameraIndex !== -1) {
       this.cameras[cameraIndex] = {
         ...this.cameras[cameraIndex],
         name: cameraData.name || this.cameras[cameraIndex].name,
-        url: cameraData.url || this.cameras[cameraIndex].url
+        url: cameraData.url || this.cameras[cameraIndex].url,
       };
-      
+
       console.log('Camera updated:', this.cameras[cameraIndex]);
       this.refreshCameraGrid();
       return this.cameras[cameraIndex];
     }
-    
+
     return null;
   },
 
   // Disconnect/Remove camera
   disconnectCamera(id) {
-    const cameraIndex = this.cameras.findIndex(camera => camera.id === parseInt(id));
-    
+    const cameraIndex = this.cameras.findIndex((camera) => camera.id === parseInt(id));
+
     if (cameraIndex !== -1) {
       const disconnectedCamera = this.cameras.splice(cameraIndex, 1)[0];
       console.log('Camera disconnected:', disconnectedCamera);
       this.refreshCameraGrid();
       return disconnectedCamera;
     }
-    
+
     return null;
   },
 
@@ -111,13 +121,13 @@ const MonitoringPresenter = {
     openModal.addEventListener('click', () => {
       this.openAddCameraModal();
     });
-    
+
     if (closeModalBtn) {
       closeModalBtn.addEventListener('click', () => {
         this.closeModal('modal-kamera');
       });
     }
-    
+
     if (cancelModalBtn) {
       cancelModalBtn.addEventListener('click', () => {
         this.closeModal('modal-kamera');
@@ -149,8 +159,7 @@ const MonitoringPresenter = {
 
     // Event delegation untuk edit buttons
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('fa-pen-to-square') || 
-          e.target.closest('.edit-camera-btn')) {
+      if (e.target.classList.contains('fa-pen-to-square') || e.target.closest('.edit-camera-btn')) {
         const cameraId = e.target.closest('.edit-camera-btn')?.dataset.cameraId;
         this.openEditCameraModal(cameraId);
       }
@@ -187,8 +196,10 @@ const MonitoringPresenter = {
 
     // Event delegation untuk disconnect buttons
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('fa-plug-circle-xmark') || 
-          e.target.closest('.disconnect-camera-btn')) {
+      if (
+        e.target.classList.contains('fa-plug-circle-xmark') ||
+        e.target.closest('.disconnect-camera-btn')
+      ) {
         const cameraId = e.target.closest('.disconnect-camera-btn')?.dataset.cameraId;
         this.openDisconnectModal(cameraId);
       }
@@ -220,23 +231,23 @@ const MonitoringPresenter = {
     // Reset form
     const form = document.getElementById('add-camera-form');
     if (form) form.reset();
-    
+
     modal.classList.remove('hidden');
   },
 
   openEditCameraModal(cameraId) {
     const modal = document.getElementById('modal-edit-kamera');
     const camera = this.getCameraById(cameraId);
-    
+
     if (!camera) return;
 
     // Pre-fill form dengan data kamera
     const nameInput = document.getElementById('edit-nama-kamera');
     const urlInput = document.getElementById('edit-url-kamera');
-    
+
     if (nameInput) nameInput.value = camera.name;
     if (urlInput) urlInput.value = camera.url;
-    
+
     // Set selected camera ID
     this.selectedCameraId = cameraId;
     modal.classList.remove('hidden');
@@ -260,10 +271,10 @@ const MonitoringPresenter = {
   handleAddCameraSubmit() {
     const nameInput = document.getElementById('nama-kamera');
     const urlInput = document.getElementById('url-kamera');
-    
+
     const cameraData = {
       name: nameInput?.value?.trim() || '',
-      url: urlInput?.value?.trim() || ''
+      url: urlInput?.value?.trim() || '',
     };
 
     // Validasi
@@ -280,7 +291,7 @@ const MonitoringPresenter = {
     // Add camera
     this.addCamera(cameraData);
     this.closeModal('modal-kamera');
-    
+
     // Show success message
     this.showNotification('Kamera berhasil ditambahkan!', 'success');
   },
@@ -290,10 +301,10 @@ const MonitoringPresenter = {
 
     const nameInput = document.getElementById('edit-nama-kamera');
     const urlInput = document.getElementById('edit-url-kamera');
-    
+
     const cameraData = {
       name: nameInput?.value?.trim() || '',
-      url: urlInput?.value?.trim() || ''
+      url: urlInput?.value?.trim() || '',
     };
 
     // Validasi
@@ -310,7 +321,7 @@ const MonitoringPresenter = {
     // Update camera
     this.updateCamera(this.selectedCameraId, cameraData);
     this.closeModal('modal-edit-kamera');
-    
+
     // Show success message
     this.showNotification('Kamera berhasil diupdate!', 'success');
   },
@@ -321,7 +332,7 @@ const MonitoringPresenter = {
     // Disconnect camera
     const disconnectedCamera = this.disconnectCamera(this.selectedCameraId);
     this.closeModal('modal-disconnect');
-    
+
     if (disconnectedCamera) {
       this.showNotification(`${disconnectedCamera.name} berhasil diputuskan!`, 'info');
     }
@@ -331,8 +342,8 @@ const MonitoringPresenter = {
   refreshCameraGrid() {
     // Trigger re-render camera grid
     // Bisa mengirim event atau memanggil method view untuk update
-    const event = new CustomEvent('camerasUpdated', { 
-      detail: { cameras: this.cameras } 
+    const event = new CustomEvent('camerasUpdated', {
+      detail: { cameras: this.cameras },
     });
     document.dispatchEvent(event);
   },
@@ -340,17 +351,16 @@ const MonitoringPresenter = {
   showNotification(message, type = 'info') {
     // Simple notification system
     console.log(`[${type.toUpperCase()}] ${message}`);
-    
+
     // Bisa diganti dengan toast notification yang lebih bagus
     const notification = document.createElement('div');
     notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg text-white ${
-      type === 'success' ? 'bg-green-600' : 
-      type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+      type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'
     }`;
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       notification.remove();
     }, 3000);
@@ -380,7 +390,7 @@ const MonitoringPresenter = {
     } catch (error) {
       console.error('Failed to save camera:', error);
     }
-  }
+  },
 };
 
 export default MonitoringPresenter;

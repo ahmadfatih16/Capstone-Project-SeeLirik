@@ -14,7 +14,8 @@ export default class MonitoringPage {
   async render() {
     return `
       ${MobileNavbar()}
-      ${Sidebar()}
+      ${await Sidebar()}
+
       ${ModalLogout()}
       ${this.renderAddCameraModal()}
       ${this.renderEditCameraModal()}
@@ -39,16 +40,20 @@ export default class MonitoringPage {
 
   renderCameraCards() {
     // Default cameras data jika presenter belum diload
-    const cameras = this.presenter ? this.presenter.getCameras() : [
-      { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4' },
-      { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4' },
-      { id: 3, name: 'Kamera Samping', url: '../../../public/video/contoh.mp4' },
-      { id: 4, name: 'Kamera Garasi', url: '../../../public/video/contoh.mp4' },
-      { id: 5, name: 'Kamera Taman', url: '../../../public/video/contoh.mp4' },
-      { id: 6, name: 'Kamera Ruang Tamu', url: '../../../public/video/contoh.mp4' }
-    ];
+    const cameras = this.presenter
+      ? this.presenter.getCameras()
+      : [
+          { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4' },
+          { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4' },
+          { id: 3, name: 'Kamera Samping', url: '../../../public/video/contoh.mp4' },
+          { id: 4, name: 'Kamera Garasi', url: '../../../public/video/contoh.mp4' },
+          { id: 5, name: 'Kamera Taman', url: '../../../public/video/contoh.mp4' },
+          { id: 6, name: 'Kamera Ruang Tamu', url: '../../../public/video/contoh.mp4' },
+        ];
 
-    return cameras.map(camera => `
+    return cameras
+      .map(
+        (camera) => `
       <div class="bg-neutral-800 rounded-md overflow-hidden">
         ${camera.isWebcam && camera.url === 'webcam' 
           ? `<video id="live-webcam-${camera.id}" autoplay muted playsinline class="w-full aspect-video rounded-sm"></video>`
@@ -72,7 +77,9 @@ export default class MonitoringPage {
           </div>
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
   renderAddCameraModal() {
@@ -240,19 +247,25 @@ export default class MonitoringPage {
 
     this.webcamVideo = webcamVideo;
 
-    // Populate webcam devices
-    await this.populateWebcamDevices();
+    startBtn.addEventListener('click', async () => {
+      try {
+        // Request webcam access
+        this.webcamStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
 
-    // Event listener for webcam selection
-    webcamSelect.addEventListener('change', () => {
-      this.selectedWebcamDeviceId = webcamSelect.value;
-      if (this.selectedWebcamDeviceId) {
-        urlInput.value = ''; // Clear URL input if webcam is selected
-        urlInput.disabled = true; // Disable URL input
-        this.startWebcam(this.selectedWebcamDeviceId); // Start webcam with selected device
-      } else {
-        urlInput.disabled = false; // Enable URL input if no webcam is selected
-        this.stopWebcam();
+        // Set video source to webcam stream
+        webcamVideo.srcObject = this.webcamStream;
+
+        // Toggle button visibility
+        startBtn.classList.add('hidden');
+        stopBtn.classList.remove('hidden');
+
+        console.log('Webcam started successfully');
+      } catch (error) {
+        console.error('Error accessing webcam:', error);
+        alert('Tidak dapat mengakses webcam. Pastikan webcam terhubung dan izin diberikan.');
       }
     });
 
@@ -319,12 +332,16 @@ export default class MonitoringPage {
   // Stop webcam stream
   stopWebcam() {
     if (this.webcamStream) {
-      this.webcamStream.getTracks().forEach(track => {
+      // Stop all tracks
+      this.webcamStream.getTracks().forEach((track) => {
         track.stop();
       });
+
+      // Clear video source
       if (this.webcamVideo) {
         this.webcamVideo.srcObject = null;
       }
+
       this.webcamStream = null;
       console.log('Webcam stopped');
     }
@@ -354,14 +371,14 @@ export default class MonitoringPage {
       
       setTimeout(() => this.initWebcam(), 100);
     });
-    
+
     if (closeModalBtn) {
       closeModalBtn.addEventListener('click', () => {
         this.stopWebcam();
         modal.classList.add('hidden');
       });
     }
-    
+
     if (cancelModalBtn) {
       cancelModalBtn.addEventListener('click', () => {
         this.stopWebcam();
@@ -397,8 +414,7 @@ export default class MonitoringPage {
 
     // Add event listeners to all edit buttons
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('fa-pen-to-square') || 
-          e.target.closest('.edit-camera-btn')) {
+      if (e.target.classList.contains('fa-pen-to-square') || e.target.closest('.edit-camera-btn')) {
         const cameraId = e.target.closest('.edit-camera-btn')?.dataset.cameraId;
         this.openEditModal(cameraId);
       }
@@ -432,8 +448,10 @@ export default class MonitoringPage {
 
     // Add event listeners to all disconnect buttons
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('fa-plug-circle-xmark') || 
-          e.target.closest('.disconnect-camera-btn')) {
+      if (
+        e.target.classList.contains('fa-plug-circle-xmark') ||
+        e.target.closest('.disconnect-camera-btn')
+      ) {
         const cameraId = e.target.closest('.disconnect-camera-btn')?.dataset.cameraId;
         this.openDisconnectModal(cameraId);
       }
@@ -472,26 +490,10 @@ export default class MonitoringPage {
     const modal = document.getElementById('modal-edit-kamera');
     const nameInput = document.getElementById('edit-nama-kamera');
     const urlInput = document.getElementById('edit-url-kamera');
-    
-    // Pre-fill form with current camera data (you can implement this based on your data structure)
-    const cameras = this.presenter ? this.presenter.getCameras() : [
-      { id: 1, name: 'Kamera Depan', url: '../../../public/video/contoh.mp4' },
-      { id: 2, name: 'Kamera Belakang', url: '../../../public/video/contoh.mp4' },
-      { id: 3, name: 'Kamera Samping', url: '../../../public/video/contoh.mp4' },
-      { id: 4, name: 'Kamera Garasi', url: '../../../public/video/contoh.mp4' },
-      { id: 5, name: 'Kamera Taman', url: '../../../public/video/contoh.mp4' },
-      { id: 6, name: 'Kamera Ruang Tamu', url: '../../../public/video/contoh.mp4' }
-    ];
-    const cameraToEdit = cameras.find(camera => camera.id == cameraId);
 
-    if (cameraToEdit) {
-      if (nameInput) nameInput.value = cameraToEdit.name;
-      if (urlInput) urlInput.value = cameraToEdit.url;
-    } else {
-      // Fallback if camera not found (e.g., initial load with default data)
-      if (nameInput) nameInput.value = '';
-      if (urlInput) urlInput.value = '';
-    }
+    // Pre-fill form with current camera data (you can implement this based on your data structure)
+    if (nameInput) nameInput.value = 'Kamera Samping';
+    if (urlInput) urlInput.value = '../../../public/video/contoh.mp4';
 
     modal.classList.remove('hidden');
     modal.dataset.cameraId = cameraId;
@@ -506,31 +508,17 @@ export default class MonitoringPage {
   handleAddCamera() {
     const nameInput = document.getElementById('nama-kamera');
     const urlInput = document.getElementById('url-kamera');
-    const webcamSelect = document.getElementById('webcam-select');
-    
-    let cameraUrl = urlInput?.value || '';
-    let isWebcam = false;
-
-    if (webcamSelect?.value && !urlInput?.value) {
-        cameraUrl = webcamSelect.value; // Use deviceId as URL for webcam
-        isWebcam = true;
-    }
 
     const cameraData = {
       name: nameInput?.value || '',
-      url: cameraUrl,
-      isWebcam: isWebcam,
-      deviceId: isWebcam ? webcamSelect.value : undefined // Store device ID if it's a webcam
+      url: urlInput?.value || 'webcam', // Use 'webcam' as identifier if URL is empty
+      isWebcam: !urlInput?.value, // Flag to identify webcam cameras
     };
 
     console.log('Adding camera:', cameraData);
-    if (this.presenter && typeof this.presenter.addCamera === 'function') {
-      this.presenter.addCamera(cameraData);
-    } else {
-      console.warn('Presenter not available or addCamera method not found.');
-    }
-    
-    // Clear form and reset webcam state
+    // Implement your add camera logic here
+
+    // Clear form
     if (nameInput) nameInput.value = '';
     if (urlInput) {
       urlInput.value = '';
@@ -545,11 +533,11 @@ export default class MonitoringPage {
     const cameraId = modal.dataset.cameraId;
     const nameInput = document.getElementById('edit-nama-kamera');
     const urlInput = document.getElementById('edit-url-kamera');
-    
+
     const cameraData = {
       id: parseInt(cameraId), // Ensure ID is a number
       name: nameInput?.value || '',
-      url: urlInput?.value || ''
+      url: urlInput?.value || '',
     };
 
     console.log('Editing camera:', cameraData);
@@ -563,7 +551,7 @@ export default class MonitoringPage {
   handleDisconnectCamera() {
     const modal = document.getElementById('modal-disconnect');
     const cameraId = modal.dataset.cameraId;
-    
+
     console.log('Disconnecting camera:', cameraId);
     if (this.presenter && typeof this.presenter.disconnectCamera === 'function') {
       this.presenter.disconnectCamera(parseInt(cameraId)); // Ensure ID is a number
@@ -597,10 +585,10 @@ export default class MonitoringPage {
       // Dynamic import presenter
       const { default: MonitoringPresenter } = await import('./monitoring-presenter.js');
       this.presenter = MonitoringPresenter;
-      
+
       // Initialize presenter
-      this.presenter.init(this); // Pass this (view instance) to the presenter
-      
+      this.presenter.init();
+
       // Listen for camera updates
       document.addEventListener('camerasUpdated', (e) => {
         this.refreshCameraGrid();
@@ -618,10 +606,6 @@ export default class MonitoringPage {
           this.stopWebcam();
         }
       });
-      
-      // Start live webcam feeds on initial load
-      this.startLiveWebcamFeeds();
-
     } catch (error) {
       console.error('Failed to load presenter:', error);
       // Fallback: initialize basic functionality
