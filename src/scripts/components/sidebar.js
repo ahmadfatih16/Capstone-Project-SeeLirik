@@ -12,14 +12,29 @@ export default async function Sidebar() {
     <a href="#/detail-riwayat" class="flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
        data-id="${item.id}" data-riwayat='${JSON.stringify(item)}'>
       <div class="flex justify-between items-center">
-        <span class="text-sm">${item.date || 'Tanggal tidak tersedia'}</span>
+        <span class="text-xs">${item.tanggal || 'Tanggal tidak tersedia'}</span>
         <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
       </div>
-      <div class="text-sm font-semibold">${item.time || '-'} <span class="font-semibold">| ${item.camera || '-'}</span></div>
+      <div class="text-xs">${item.waktu || '-'} <span>| ${item.kamera || '-'}</span></div>
     </a>
   `
       )
       .join('') || `<p class="text-sm text-center text-neutral-400">Belum ada riwayat</p>`;
+
+  // Event listener agar data disimpan ke sessionStorage saat diklik
+  setTimeout(() => {
+    document.querySelectorAll('[data-id]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const riwayatData = el.dataset.riwayat;
+        sessionStorage.setItem('selectedActivityData', riwayatData);
+
+        // Jika sudah di halaman detail, paksa reload
+        if (location.hash === '#/detail-riwayat') {
+          location.reload();
+        }
+      });
+    });
+  }, 0);
 
   return `
     <aside id="sidebar" class="w-full sm:w-72 max-w-full bg-neutral-800 p-4 h-screen fixed overflow-y-auto z-50 transform lg:translate-x-0 -translate-x-full transition-transform duration-300 text-white">
@@ -51,7 +66,7 @@ export default async function Sidebar() {
         </a>
       </nav>
 
-      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto">
+      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto custom-scroll">
         <h3 class="text-sm text-center mb-3 text-white">Riwayat Aktivitas Mencurigakan</h3>
         ${renderRiwayatItems}
       </div>

@@ -19,3 +19,8 @@ export const getUserData = async () => {
     return null;
   }
 };
+
+export const getUserToken = () => {
+  return localStorage.getItem('token') || '';
+};
+
