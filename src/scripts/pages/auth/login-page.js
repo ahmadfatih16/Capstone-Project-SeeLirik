@@ -8,20 +8,20 @@ export default class LoginPage {
     return `
       <div class="container login-mode">
 
-         <div class="toggle-box">
-          <div class="toggle-panel toggle-left">
-            <img src="../../../public/images/auth/logo.png" alt="Logo" class="logo-image" />
-            <h1>Welcome to SeeLirik!</h1>
-            <p>Don't have an account?</p>
-            <button class="btn register-btn">Register</button>
-          </div>
-        </div>
+           <div class="toggle-box">
+           <div class="toggle-panel toggle-left">
+             <img src="../../../public/images/auth/logo.png" alt="Logo" class="logo-image" />
+             <h1>Welcome to SeeLirik!</h1>
+             <p>Don't have an account?</p>
+             <button class="btn register-btn">Register</button>
+           </div>
+         </div>
 
         <div class="form-box login">
           <form id="login-form">
             <h1>Login</h1>
             <div class="input-box">
-              <input type="text" id="username" placeholder="Username" required />
+              <input type="text" id="username" placeholder="Email" required />
               <i class='bx bxs-user'></i>
             </div>
             <div class="input-box">
@@ -30,15 +30,15 @@ export default class LoginPage {
             </div>
             
            <button type="submit" id="loginButton" class="btn">
-              <span id="loginText">Login</span>
-              <span id="loginSpinner" class="loader" style="display: none;"></span>
-            </button>
+             <span id="loginText">Login</span>
+             <span id="loginSpinner" class="loader" style="display: none;"></span>
+           </button>
 
             <p id="login-error" class="error-text"></p>
           </form>
         </div>
 
-       
+        
       </div>
     `;
   }
@@ -61,6 +61,7 @@ export default class LoginPage {
       loginSpinner.style.display = 'inline-block';
 
       try {
+        // Karena input sekarang adalah "Email", kirim sebagai email
         const data = await AuthModel.login({ email: username, password });
 
         if (data.token) {

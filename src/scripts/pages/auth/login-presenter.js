@@ -32,7 +32,7 @@ export default class LoginPage {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = form.email.value.trim();
+      const email = form.email.value.trim(); // Pastikan variabelnya 'email' sesuai dengan ID input
       const password = form.password.value.trim();
 
       loginButton.disabled = true;
