@@ -1,3 +1,5 @@
+import { BASE_URL_BACKEND } from '../../data/api.js';
+
 export default class AkunPresenter {
   constructor() {
     this.elements = {};
@@ -14,7 +16,7 @@ export default class AkunPresenter {
     this.elements.namaTokoDisplay = document.getElementById('nama-toko-display');
     this.elements.deskripsiTokoDisplay = document.getElementById('deskripsi-toko-display');
     this.elements.namaTokoField = document.getElementById('nama-toko-field');
-    this.elements.adminField = document.getElementById('admin-field');
+    this.elements.userField = document.getElementById('user-field');
     this.elements.alamatField = document.getElementById('alamat-field');
     this.elements.emailField = document.getElementById('email-field');
     this.elements.passwordField = document.getElementById('password-field');
@@ -28,11 +30,9 @@ export default class AkunPresenter {
       const modal = document.getElementById('modal-edit-akun');
       modal?.classList.remove('hidden');
 
-      // Auto-isi form dari data akun yang sudah di-fetch
-      document.getElementById('edit-store-name').value = this.akunData?.storeName || '';
-      document.getElementById('edit-store-location').value = this.akunData?.storeLocation || '';
-      document.getElementById('edit-store-description').value =
-        this.akunData?.storeDescription || '';
+      document.getElementById('edit-store-name').value = this.akunData?.store_name || '';
+      document.getElementById('edit-store-location').value = this.akunData?.address || '';
+      document.getElementById('edit-store-description').value = this.akunData?.store_description || '';
       document.getElementById('edit-username').value = this.akunData?.username || '';
     });
 
@@ -55,45 +55,42 @@ export default class AkunPresenter {
     }
 
     try {
-      const response = await fetch('https://backend-seelirik-production.up.railway.app/me', {
+      const response = await fetch(`${BASE_URL_BACKEND}/account`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Login gagal');
+      if (!response.ok) throw new Error(result.message || 'Gagal mengambil akun');
 
-      const user = result.data;
-      this.akunData = user; // simpan untuk auto-isi modal
+      const user = result.user;
+      this.akunData = user;
 
-      this.elements.namaTokoDisplay.innerText = user.storeName;
-      this.elements.deskripsiTokoDisplay.innerText = user.storeDescription;
-      this.elements.namaTokoField.innerText = user.storeName;
-      this.elements.adminField.innerText = user.username;
-      this.elements.alamatField.innerText = user.storeLocation;
-      this.elements.emailField.innerText = user.email;
-      this.elements.passwordField.innerText = '********************';
+      this.elements.namaTokoDisplay.innerText = user.store_name || '-';
+      this.elements.deskripsiTokoDisplay.innerText = user.store_description || '-';
+      this.elements.namaTokoField.innerText = user.store_name || '-';
+      this.elements.userField.innerText = user.username || '-';
+      this.elements.alamatField.innerText = user.address || '-';
+      this.elements.emailField.innerText = user.email || '-';
 
       this.elements.loadingText.classList.add('hidden');
       this.elements.detailContainer.classList.remove('hidden');
     } catch (error) {
-      alert(`Error: ${error.message}`);
-      localStorage.removeItem('token');
-      window.location.hash = '#/login';
+      alert(`Gagal memuat data akun: ${error.message}`);
     }
   }
 
   async updateAkunData() {
     const token = localStorage.getItem('token');
     const body = {
-      storeName: document.getElementById('edit-store-name').value,
-      storeLocation: document.getElementById('edit-store-location').value,
-      storeDescription: document.getElementById('edit-store-description').value,
+      store_name: document.getElementById('edit-store-name').value,
+      address: document.getElementById('edit-store-location').value,
+      store_description: document.getElementById('edit-store-description').value,
       username: document.getElementById('edit-username').value,
     };
 
     try {
-      const response = await fetch('https://backend-seelirik-production.up.railway.app/me', {
+      const response = await fetch(`${BASE_URL_BACKEND}/account`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -103,19 +100,17 @@ export default class AkunPresenter {
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Gagal update');
+      if (!response.ok) throw new Error(result.message || 'Gagal update akun');
 
-      // alert('Akun berhasil diperbarui!');
       document.getElementById('modal-edit-akun').classList.add('hidden');
       await this.fetchAkunData();
 
-      // ✅ Update isi sidebar secara langsung
       const sidebarUsername = document.getElementById('sidebar-username');
       if (sidebarUsername) {
         sidebarUsername.innerText = body.username;
       }
     } catch (error) {
-      alert(`Gagal update: ${error.message}`);
+      alert(`Gagal update akun: ${error.message}`);
     }
   }
 }

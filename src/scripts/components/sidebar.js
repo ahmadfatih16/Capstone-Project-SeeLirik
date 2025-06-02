@@ -1,35 +1,52 @@
-import { getUserData } from '../utils/auth-user.js';
+import { getAccount } from '../data/api.js';
 import { fetchRecentRiwayat } from '../utils/fetch-riwayat-sidebar.js';
 
 export default async function Sidebar() {
-  const user = await getUserData();
+  const { user } = await getAccount(); 
   const riwayatList = await fetchRecentRiwayat();
 
   const renderRiwayatItems =
-    riwayatList
-      .map(
-        (item) => `
-    <a href="#/detail-riwayat" class="flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
-       data-id="${item.id}" data-riwayat='${JSON.stringify(item)}'>
-      <div class="flex justify-between items-center">
-        <span class="text-xs">${item.tanggal || 'Tanggal tidak tersedia'}</span>
-        <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
-      </div>
-      <div class="text-xs">${item.waktu || '-'} <span>| ${item.kamera || '-'}</span></div>
-    </a>
-  `
-      )
-      .join('') || `<p class="text-sm text-center text-neutral-400">Belum ada riwayat</p>`;
+    riwayatList.length > 0
+      ? riwayatList
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .map((item) => {
+            const localDate = new Date(item.created_at);
+            const tanggal = localDate.toLocaleDateString('id-ID', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
+            const waktu = localDate.toLocaleTimeString('id-ID', {
+              hour: '2-digit',
+              minute: '2-digit',
+            });
 
-  // Event listener agar data disimpan ke sessionStorage saat diklik
+            return `
+              <a href="#/detail-riwayat" 
+                 class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
+                 data-riwayat='${JSON.stringify(item)}'>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs">${tanggal || '-'}</span>
+                  <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
+                </div>
+                <div class="text-xs">${waktu?.substring(0, 5) || '-'} WIB <span>| ${item.camera_name || '-'}</span></div>
+              </a>
+            `;
+          })
+          .join('')
+      : `<p class="text-sm text-center text-neutral-400">Belum ada riwayat</p>`;
+
+  // Event listener setelah elemen render
   setTimeout(() => {
-    document.querySelectorAll('[data-id]').forEach((el) => {
-      el.addEventListener('click', () => {
-        const riwayatData = el.dataset.riwayat;
-        sessionStorage.setItem('selectedActivityData', riwayatData);
+    const links = document.querySelectorAll('.riwayat-link');
+    links.forEach((link) => {
+      link.addEventListener('click', () => {
+        const data = link.dataset.riwayat;
+        sessionStorage.setItem('selectedActivityData', data);
 
-        // Jika sudah di halaman detail, paksa reload
-        if (location.hash === '#/detail-riwayat') {
+        // Jika user sedang di /detail-riwayat, paksa reload agar data tampil ulang
+        if (window.location.hash === '#/detail-riwayat') {
           location.reload();
         }
       });

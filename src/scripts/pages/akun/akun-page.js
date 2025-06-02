@@ -49,8 +49,8 @@ export default class AkunPage {
               <div id="nama-toko-field" class="bg-neutral-800 p-2 rounded text-white">Loading...</div>
             </div>
             <div>
-              <label class="block text-emerald-400 mb-1">Admin</label>
-              <div id="admin-field" class="bg-neutral-800 p-2 rounded text-white">Loading...</div>
+              <label class="block text-emerald-400 mb-1">Username</label>
+              <div id="user-field" class="bg-neutral-800 p-2 rounded text-white">Loading...</div>
             </div>
           </div>
 

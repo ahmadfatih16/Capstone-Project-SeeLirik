@@ -1,30 +1,41 @@
+import { BASE_URL_BACKEND } from '../data/api.js';
+
 const AuthModel = {
-  async login(payload) {
-    const response = await fetch('https://backend-seelirik-production.up.railway.app/login', {
+  async login({ email, password }) {
+    const res = await fetch(`${BASE_URL_BACKEND}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ email, password }),
     });
 
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.message);
-    return result.data;
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Login gagal');
+
+    return data; // { token: '...' }
   },
 
-  async register(payload) {
-    const response = await fetch('https://backend-seelirik-production.up.railway.app/register', {
+  async register({ username, email, password, storeName, storeLocation, storeDescription }) {
+    const res = await fetch(`${BASE_URL_BACKEND}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        store_name: storeName,
+        store_location: storeLocation,
+        store_description: storeDescription,
+      }),
     });
 
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.message);
-    return result.message;
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Register gagal');
+
+    return data.message || 'Register berhasil';
   },
 };
 

@@ -10,7 +10,7 @@ module.exports = merge(common, {
     static: {
       directory: path.resolve(__dirname, 'src'),
     },
-    port: 3000,
+    port: 3002,
     open: true,
     hot: true,
   },
