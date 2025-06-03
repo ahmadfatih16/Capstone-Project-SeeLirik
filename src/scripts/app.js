@@ -21,7 +21,8 @@ const App = {
     const page = (routes[url] || routes['/'])(); // Fallback ke '/' jika URL tidak ditemukan
 
     const body = document.body;
-    const mainContent = document.getElementById('app');
+    // const mainContent = document.getElementById('app');
+    const mainContent = document.getElementById('main-content');
 
     // Atur kelas body untuk halaman otentikasi
     body.classList.remove('auth-page');

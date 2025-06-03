@@ -10,6 +10,8 @@ export default class RiwayatPage {
   constructor() {
     this.presenter = new RiwayatPresenter(this);
   }
+  
+  
 
   async render() {
     return `
@@ -31,9 +33,8 @@ export default class RiwayatPage {
               <tr class="text-left text-emerald-400">
                 <th class="px-4 py-2">Tanggal</th>
                 <th class="px-4 py-2">Waktu</th>
-                <th class="px-4 py-2">Kamera</th>
-                <th class="px-4 py-2">Aktifitas</th>
-                <th class="px-4 py-2">Alarm</th>
+                <th class="px-4 py-2">Nama Kamera</th>
+                <th class="px-4 py-2">Label</th>
               </tr>
             </thead>
             <tbody id="riwayat-table-body" class="divide-y divide-neutral-700">
@@ -53,52 +54,71 @@ export default class RiwayatPage {
 
     // Initialize presenter
     await this.presenter.init();
+    this.addRowClickListener();
+
   }
 
   // Method untuk update tampilan tabel dari presenter
-  updateRiwayatTable(data) {
+  showRiwayat(data) {
     const tableBody = document.getElementById('riwayat-table-body');
-    if (tableBody) {
-      tableBody.innerHTML = data
-        .map(
-          (item, index) => `
-        <tr class="hover:bg-neutral-800 transition cursor-pointer" data-activity-id="${item.id || index}" data-activity='${JSON.stringify(item)}'>
-          <td class="px-4 py-3">${item.tanggal}</td>
-          <td class="px-4 py-3">${item.waktu}</td>
-          <td class="px-4 py-3">${item.kamera}</td>
-          <td class="px-4 py-3">${item.aktivitas}</td>
-          <td class="px-4 py-3">
-            <span class="inline-block px-3 py-1 ${item.alarm === 'aktif' ? 'bg-emerald-600' : 'bg-red-600'} text-white rounded-full text-xs">
-              ${item.alarm}
-            </span>
-          </td>
-        </tr>
-      `
-        )
-        .join('');
+    tableBody.innerHTML = '';
 
-      // Add click event listeners to table rows
-      this.addTableRowClickListeners();
-    }
+    data.forEach((item) => {
+      const waktuObj = new Date(item.created_at);
+      const date = new Date(item.created_at);
+      const tanggalFormatted = date.toLocaleDateString('id-ID', {
+        weekday: 'long',    // Senin, Selasa, ...
+        year: 'numeric',
+        month: 'long',      // Januari, Februari, ...
+        day: 'numeric'
+      });
+      const waktuFix = waktuObj.toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Jakarta',
+      });
+      
+
+      const row = `
+      <tr class="hover:bg-neutral-800 cursor-pointer"
+          data-id="${item.id}"
+          data-tanggal="${tanggalFormatted}"
+          data-waktu="${waktuFix} WIB"
+          data-kamera="${item.camera_name}"
+          data-aktivitas="${item.label}"
+          data-image="${item.image}"
+          data-video="${item.video}">
+        <td class="px-4 py-2">${tanggalFormatted}</td>
+        <td class="px-4 py-2">${waktuFix} WIB</td>
+        <td class="px-4 py-2">${item.camera_name}</td>
+        <td class="px-4 py-2">${item.label}</td>
+      </tr>
+    `;
+    
+    
+      tableBody.innerHTML += row;
+    });
   }
 
+
   // Method untuk menambahkan event listener pada baris tabel
-  addTableRowClickListeners() {
-    const tableRows = document.querySelectorAll('#riwayat-table-body tr[data-activity-id]');
-    tableRows.forEach((row) => {
-      row.addEventListener('click', (e) => {
-        const activityData = JSON.parse(row.getAttribute('data-activity'));
-        const activityId = row.getAttribute('data-activity-id');
-
-        // Store activity data in sessionStorage for detail page
-        sessionStorage.setItem('selectedActivityData', JSON.stringify(activityData));
-        sessionStorage.setItem('selectedActivityId', activityId);
-
-        // Navigate to detail page
-        window.location.hash = '#/detail-riwayat';
+  addRowClickListener() {
+    const rows = document.querySelectorAll('#riwayat-table-body tr');
+    rows.forEach((row) => {
+      row.addEventListener('click', () => {
+        const id = row.dataset.id;
+  
+        // Simpan hanya ID ke sessionStorage
+        sessionStorage.setItem('selectedActivityId', id);
+  
+        // Arahkan ke routing statis
+        window.location.href = '#/detail-riwayat';
       });
     });
   }
+  
+  
+  
 
   // Method untuk menampilkan loading state
   showLoading() {
@@ -107,7 +127,7 @@ export default class RiwayatPage {
       tableBody.innerHTML = `
         <tr>
           <td colspan="5" class="px-4 py-8 text-center text-neutral-400">
-            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+            <i class="fa-solid fa-spinner fa-spin text-2xl mt-8 mb-2"></i>
             <p>Memuat data riwayat...</p>
           </td>
         </tr>
@@ -122,7 +142,7 @@ export default class RiwayatPage {
       tableBody.innerHTML = `
         <tr>
           <td colspan="5" class="px-4 py-8 text-center text-red-400">
-            <i class="fa-solid fa-exclamation-triangle text-2xl mb-2"></i>
+            <i class="mt-8 fa-solid fa-exclamation-triangle text-2xl mb-2"></i>
             <p>${message}</p>
           </td>
         </tr>
@@ -136,8 +156,8 @@ export default class RiwayatPage {
     if (tableBody) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="5" class="px-4 py-8 text-center text-neutral-400">
-            <i class="fa-solid fa-inbox text-2xl mb-2"></i>
+          <td colspan="5" class="mt-4 px-4 py-8 text-center text-neutral-400">
+            <i class="fa-solid fa-inbox text-2xl mt-8 mb-2"></i>
             <p>Tidak ada riwayat aktivitas mencurigakan</p>
           </td>
         </tr>

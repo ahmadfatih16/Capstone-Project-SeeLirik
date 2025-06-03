@@ -1,9 +1,12 @@
+import { BASE_URL_BACKEND } from '../data/api';
+
+
 export const getUserData = async () => {
   const token = localStorage.getItem('token');
   if (!token) return null;
 
   try {
-    const response = await fetch('https://backend-seelirik-production.up.railway.app/me', {
+    const response = await fetch(`${BASE_URL_BACKEND}/account`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,4 +26,3 @@ export const getUserData = async () => {
 export const getUserToken = () => {
   return localStorage.getItem('token') || '';
 };
-
