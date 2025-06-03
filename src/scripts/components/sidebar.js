@@ -2,7 +2,7 @@ import { getAccount } from '../data/api.js';
 import { fetchRecentRiwayat } from '../utils/fetch-riwayat-sidebar.js';
 
 export default async function Sidebar() {
-  const { user } = await getAccount(); 
+  const { user } = await getAccount();
   const riwayatList = await fetchRecentRiwayat();
 
   const renderRiwayatItems =
@@ -23,9 +23,9 @@ export default async function Sidebar() {
             });
 
             return `
-              <a href="#/detail-riwayat" 
-                 class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
-                 data-riwayat='${JSON.stringify(item)}'>
+              <a href="#/detail-riwayat"
+                  class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
+                  data-riwayat='${JSON.stringify(item)}'>
                 <div class="flex justify-between items-center">
                   <span class="text-xs">${tanggal || '-'}</span>
                   <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
@@ -54,7 +54,7 @@ export default async function Sidebar() {
   }, 0);
 
   return `
-    <aside id="sidebar" class="w-full sm:w-72 max-w-full bg-neutral-800 p-4 h-screen fixed overflow-y-auto z-50 transform lg:translate-x-0 -translate-x-full transition-transform duration-300 text-white">
+    <aside id="sidebar" class="w-full sm:w-72 max-w-full bg-neutral-800 p-4 h-screen fixed overflow-y-auto z-50 transform lg:translate-x-0 -translate-x-full transition-transform duration-300 text-white custom-scrollbar">
       <div class="logo hidden lg:block">
         <img src="/public/images/logotext-seelirik.png" class="text-xl font-bold mt-2 mb-5 h-10 cursor-pointer"/>
       </div>
@@ -83,7 +83,7 @@ export default async function Sidebar() {
         </a>
       </nav>
 
-      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto custom-scroll">
+      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto custom-scrollbar">
         <h3 class="text-sm text-center mb-3 text-white">Riwayat Aktivitas Mencurigakan</h3>
         ${renderRiwayatItems}
       </div>

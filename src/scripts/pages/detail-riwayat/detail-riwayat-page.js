@@ -17,7 +17,7 @@ export default class DetailRiwayatPage {
       ${await Sidebar()}
       ${ModalLogout()}
 
-      <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
+      <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen custom-scrollbar">
         ${DateTime()}
 
         <div id="detail-riwayat-content" class="text-white">Memuat data riwayat...</div>
@@ -35,11 +35,6 @@ export default class DetailRiwayatPage {
   }
 
   updateActivityData(data) {
-
-    
-
-
-
     const contentEl = document.getElementById('detail-riwayat-content');
 
     const safeActivityData = {

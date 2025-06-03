@@ -17,7 +17,7 @@ export default class MonitoringPage {
       ${MobileNavbar()}
       ${await Sidebar()}
 
-      <main class="lg:ml-72 p-4 sm:p-6">
+      <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen custom-scrollbar">
         ${DateTime()}
         <button id="openModal" type="button" class="w-full cursor-pointer bg-emerald-400 px-4 py-2 rounded font-semibold text-white mb-6">➕ Tambah Kamera</button>
         <div id="daftarKameraGrid" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
@@ -83,7 +83,7 @@ export default class MonitoringPage {
     card.querySelector('.fa-power-off').onclick = () => {
       stream.getTracks().forEach(t => t.stop());
       card.remove();
-      onDelete?.(); // ⬅️ Panggil callback ke presenter
+      onDelete?.();
     };
     
 
