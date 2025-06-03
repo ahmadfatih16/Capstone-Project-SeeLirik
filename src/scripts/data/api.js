@@ -68,4 +68,81 @@ export async function postKamera(name, deviceId) {
   return await response.json();
 }
 
+// camerassssssssssssssssss
+
+async function fetchCameras() {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${BASE_URL_BACKEND}/cameras`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) throw new Error('Gagal mengambil daftar kamera');
+  return await response.json();
+}
+
+
+async function addCamera(cameraData) {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${BASE_URL_BACKEND}/cameras`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(cameraData),
+  });
+
+  if (!response.ok) throw new Error('Gagal menambahkan kamera');
+  return await response.json();
+}
+
+
+
+async function editCameraName(id, newName) {
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(`${BASE_URL_BACKEND}/cameras/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, 
+    },
+    body: JSON.stringify({ name: newName })
+  });
+
+  if (!response.ok) {
+    throw new Error('Gagal mengubah nama kamera');
+  }
+
+  return response.json();
+}
+
+
+
+async function deleteCamera(id) {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${BASE_URL_BACKEND}/cameras/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const msg = await res.text();
+    console.error('[DEBUG] Gagal DELETE:', res.status, msg);
+    throw new Error('Gagal menghapus kamera');
+  }
+  
+}
+
+
+export {
+  fetchCameras,
+  addCamera,
+  editCameraName,
+  deleteCamera
+};
 

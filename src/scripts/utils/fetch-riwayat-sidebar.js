@@ -21,7 +21,10 @@ export async function fetchRecentRiwayat(limit = 5) {
 
     if (!Array.isArray(data)) return [];
 
-    return data.slice().reverse().slice(0, limit);
+    return data
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // urutkan dari terbaru
+  .slice(0, limit); // ambil 5 pertama
+
   } catch (err) {
     console.error('Gagal mengambil data riwayat:', err);
     return [];

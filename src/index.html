@@ -10,7 +10,6 @@
     <link rel="icon" href="/public/images/logo-seelirik.png" type="image/png" />
     <link rel="apple-touch-icon" href="/public/images/logo-seelirik.png" />
 
-
     <script
       type="module"
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
@@ -35,6 +34,18 @@
     <div id="app">
       <div id="main-content"></div>
     </div>
+
+    <section id="content"></section>
+
+    <div id="modalWrapper" class="fixed inset-0 bg-black/50 hidden z-50">
+      <div class="flex justify-center items-center min-h-screen">
+        <div
+          id="modalContent"
+          class="bg-neutral-800 p-6 rounded-lg shadow-xl w-full max-w-lg"
+        ></div>
+      </div>
+    </div>
+
     <script type="module" src="/scripts/index.js"></script>
   </body>
 </html>
