@@ -1,24 +1,25 @@
+// src/sw.js
 const CACHE_NAME = 'seelirik-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/src/styles/style.css',
-  '/src/styles/auth-style.css',
-  '/src/styles/input.css',
-  '/src/styles/output.css',
-  '/src/scripts/index.js',
-  '/src/scripts/app.js',
-  // Tambahkan semua aset statis penting yang ingin Anda cache
-  // seperti gambar, font, HTML template, CSS, JS, dll.
-  '/src/public/images/auth/background.png',
-  '/src/public/images/auth/logo.png',
-  // ... dan semua gambar lainnya di src/public/images/
-  '/src/public/menu.svg',
-  '/src/public/video/contoh.mp4', // Jika Anda ingin video ini offline juga
-  // Anda mungkin perlu menambahkan semua halaman HTML Anda juga
-  '/src/scripts/pages/akun/akun-page.html',
-  '/src/scripts/pages/auth/loginpage.html',
-  // ... dll
+  '/styles/style.css',
+  '/styles/auth-style.css',
+  '/styles/input.css',
+  '/styles/output.css',
+  '/scripts/index.js',
+  '/scripts/app.js',
+  '/public/images/logo-seelirik.png',
+  '/public/images/screenshot-desktop-1.png',
+  '/public/images/screenshot-mobile-1.png',
+  '/public/images/screenshot-desktop-2.png',
+  '/public/images/screenshot-mobile-2.png',
+  '/public/images/auth/background.png',
+  '/public/images/auth/logo.png',
+  '/public/menu.svg',
+  '/public/video/contoh.mp4',
+  '/scripts/pages/akun/akun-page.html',
+  '/scripts/pages/auth/loginpage.html',
 ];
 
 self.addEventListener('install', (event) => {
@@ -35,7 +36,6 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Cache hit - return response
         if (response) {
           return response;
         }

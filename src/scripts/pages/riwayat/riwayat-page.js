@@ -10,8 +10,6 @@ export default class RiwayatPage {
   constructor() {
     this.presenter = new RiwayatPresenter(this);
   }
-  
-  
 
   async render() {
     return `
@@ -20,13 +18,11 @@ export default class RiwayatPage {
 
       ${ModalLogout()}
 
-      <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen">
+      <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen custom-scrollbar">
         ${DateTime()}
         
-        <!-- Judul -->
         <h3 class="text-2xl font-bold text-emerald-400 mb-4">Riwayat Aktifitas Mencurigakan</h3>
 
-        <!-- Tabel Responsif Riwayat -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-neutral-700 text-white text-sm sm:text-base">
             <thead>
@@ -38,8 +34,7 @@ export default class RiwayatPage {
               </tr>
             </thead>
             <tbody id="riwayat-table-body" class="divide-y divide-neutral-700">
-              <!-- Data akan diisi oleh presenter -->
-            </tbody>
+              </tbody>
           </table>
         </div>
       </main>
@@ -78,7 +73,6 @@ export default class RiwayatPage {
         timeZone: 'Asia/Jakarta',
       });
       
-
       const row = `
       <tr class="hover:bg-neutral-800 cursor-pointer"
           data-id="${item.id}"
@@ -95,11 +89,9 @@ export default class RiwayatPage {
       </tr>
     `;
     
-    
       tableBody.innerHTML += row;
     });
   }
-
 
   // Method untuk menambahkan event listener pada baris tabel
   addRowClickListener() {
@@ -107,19 +99,12 @@ export default class RiwayatPage {
     rows.forEach((row) => {
       row.addEventListener('click', () => {
         const id = row.dataset.id;
-  
-        // Simpan hanya ID ke sessionStorage
         sessionStorage.setItem('selectedActivityId', id);
-  
-        // Arahkan ke routing statis
         window.location.href = '#/detail-riwayat';
       });
     });
   }
   
-  
-  
-
   // Method untuk menampilkan loading state
   showLoading() {
     const tableBody = document.getElementById('riwayat-table-body');
