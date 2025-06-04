@@ -1,26 +1,26 @@
 /* Custom Scrollbar Styling */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px; /* Lebar scrollbar vertikal */
-  height: 8px; /* Tinggi scrollbar horizontal */
+  width: 8px; 
+  height: 8px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #262626; /* Warna latar belakang track scrollbar (dark gray) */
+  background: #262626;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #525252; /* Warna thumb scrollbar (neutral-600, abu-abu) */
+  background-color: #525252;
   border-radius: 10px;
-  border: 2px solid #262626; /* Padding sekitar thumb */
+  border: 2px solid #262626; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #737373; /* Warna thumb saat hover (neutral-500, abu-abu lebih terang) */
+  background-color: #737373; 
 }
 
 /* Styling untuk Firefox */
 .custom-scrollbar {
-  scrollbar-width: thin; /* 'auto' atau 'thin' */
-  scrollbar-color: #525252 #262626; /* thumb color track color */
+  scrollbar-width: thin; 
+  scrollbar-color: #525252 #262626;
 }
