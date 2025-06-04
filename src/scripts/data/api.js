@@ -1,5 +1,5 @@
-// export const BASE_URL_BACKEND = 'http://localhost:3000';
-export const BASE_URL_BACKEND = 'https://backend-capstone-seelirik-production.up.railway.app';
+export const BASE_URL_BACKEND = 'http://localhost:3000';
+// export const BASE_URL_BACKEND = 'https://backend-capstone-seelirik-production.up.railway.app';
 
 export async function getRiwayat() {
   const response = await fetch(`${BASE_URL_BACKEND}/histories`, {
