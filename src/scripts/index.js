@@ -1,7 +1,7 @@
 import App from './app.js';
 import '../styles/output.css';
 import '../styles/style.css';
-import swRegister from './utils/sw-register'; // Import swRegister
+import swRegister from './utils/sw-register.js'; // Import swRegister
 import { openModal } from './utils/modal-handler.js';
 
 window.addEventListener('hashchange', () => {
