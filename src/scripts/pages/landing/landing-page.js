@@ -53,10 +53,10 @@ export default class LandingPage {
             </a>
           </nav>
         </header>
-  
+ 
         <main class="px-10">
           <!-- HOME -->
-           ${LandingHome()}
+          ${LandingHome()}
           <!-- ABOUT -->
           ${LandingAbout()}
           <!-- DEMO -->
@@ -64,7 +64,7 @@ export default class LandingPage {
           <!-- CONTACT -->
           ${LandingContact()}
         </main>
-  
+ 
         <footer>
           <div class="bg-neutral-800 p-5 mt-10">
             <p class="text-white text-center">&copy; 2025-SeeLirik. Semua hak dilindungi.</p>
