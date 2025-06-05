@@ -1,5 +1,11 @@
 import UrlParser from './routes/url-parser.js';
 import routes from './routes/route.js';
+import { io } from 'socket.io-client';
+// window.socket = io('http://localhost:4000');
+window.socket = io('https://realtime-server-seelirik-production.up.railway.app');
+
+
+
 
 const App = {
   async renderPage() {
