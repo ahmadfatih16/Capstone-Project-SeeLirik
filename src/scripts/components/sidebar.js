@@ -1,3 +1,5 @@
+// sidebar.js
+
 import { getAccount } from '../data/api.js';
 import { fetchRecentRiwayat } from '../utils/fetch-riwayat-sidebar.js';
 
@@ -37,7 +39,6 @@ export default async function Sidebar() {
           .join('')
       : `<p class="text-sm text-center text-neutral-400">Belum ada riwayat</p>`;
 
-  // Event listener setelah elemen render
   setTimeout(() => {
     const links = document.querySelectorAll('.riwayat-link');
     links.forEach((link) => {
@@ -45,12 +46,52 @@ export default async function Sidebar() {
         const data = link.dataset.riwayat;
         sessionStorage.setItem('selectedActivityData', data);
 
-        // Jika user sedang di /detail-riwayat, paksa reload agar data tampil ulang
         if (window.location.hash === '#/detail-riwayat') {
           location.reload();
         }
       });
     });
+
+    // 🔁 Tambahkan listener realtime
+    const socket = window.socket;
+    const container = document.querySelector('#sidebar .custom-scrollbar');
+    if (socket && container) {
+      socket.on('new_detection', (data) => {
+        const { camera_name, label } = data;
+        const now = new Date();
+        const tanggal = now.toLocaleDateString('id-ID', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+        const waktu = now.toLocaleTimeString('id-ID', {
+          hour: '2-digit', minute: '2-digit'
+        });
+
+        const html = `
+          <a href="#/detail-riwayat" 
+             class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
+             data-riwayat='${JSON.stringify(data)}'>
+            <div class="flex justify-between items-center">
+              <span class="text-xs">${tanggal}</span>
+              <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
+            </div>
+            <div class="text-xs">${waktu} WIB <span>| ${camera_name}</span></div>
+          </a>
+        `;
+
+        container.insertAdjacentHTML('afterbegin', html);
+
+        const link = container.querySelector('.riwayat-link');
+        link?.addEventListener('click', () => {
+          sessionStorage.setItem('selectedActivityData', JSON.stringify(data));
+          if (window.location.hash === '#/detail-riwayat') location.reload();
+        });
+
+        const allLinks = container.querySelectorAll('.riwayat-link');
+        if (allLinks.length > 5) {
+          allLinks[allLinks.length - 1].remove();
+        }
+      });
+    }
   }, 0);
 
   return `
@@ -79,12 +120,13 @@ export default async function Sidebar() {
         </a>
         <a href="#/logout" data-route="/logout" class="flex items-center p-3 rounded-md hover:bg-neutral-700 hover:text-emerald-400 transition-colors" id="keluar-link">
           <img src="/public/images/dashboard/keluar-icon.png" class="w-6 h-6 object-contain" data-icon />
-          <span class="ml-3">Keluar</span>
+          <span class="ml-3 mb-3">Keluar</span>
         </a>
-      </nav>
 
-      <div class="mt-8 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto custom-scrollbar">
-        <h3 class="text-sm text-center mb-3 text-white">Riwayat Aktivitas Mencurigakan</h3>
+      </nav>
+                      <h3 class="text-sm text-center mt-8 mb-1 text-white">Riwayat Aktivitas Mencurigakan</h3>
+      <div class="mt-2 w-full h-64 bg-neutral-900 rounded-lg p-4 overflow-y-auto custom-scrollbar">
+
         ${renderRiwayatItems}
       </div>
     </aside>
