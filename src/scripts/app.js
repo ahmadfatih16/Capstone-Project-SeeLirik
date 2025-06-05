@@ -1,5 +1,8 @@
 import UrlParser from './routes/url-parser.js';
 import routes from './routes/route.js';
+import { io } from 'socket.io-client';
+window.socket = io('http://localhost:4000');
+
 
 const App = {
   async renderPage() {
