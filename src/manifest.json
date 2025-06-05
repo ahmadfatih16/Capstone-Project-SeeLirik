@@ -20,8 +20,8 @@
     {
       "src": "/public/images/logo-seelirik.png",
       "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
+      
     }
   ],
   "screenshots": [
