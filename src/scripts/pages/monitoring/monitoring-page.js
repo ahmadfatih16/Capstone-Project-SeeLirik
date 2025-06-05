@@ -46,7 +46,9 @@ export default class MonitoringPage {
     presenter.renderAllCameras();
 
     // SOCKET.IO: Dengarkan bounding box dari WebSocket server
-    const socket = io('http://localhost:4000');
+    // const socket = io('http://localhost:4000');
+    const socket = io('https://realtime-server-seelirik-production.up.railway.app');
+
 
     socket.on('new_detection', (data) => {
       const { camera_name, bounding_box, label } = data;
