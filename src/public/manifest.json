@@ -1,0 +1,58 @@
+{
+  "name": "SeeLirik",
+  "short_name": "SeeLirik",
+  "description": "Aplikasi Monitoring Kamera Keamanan dengan Deteksi Pencurian",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./images/logo-seelirik.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/logo-seelirik.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/logo-seelirik-box.png",
+      "sizes": "180x180",
+      "type": "image/png"
+      
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./images/screenshot-desktop-1.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tampilan Dashboard"
+    },
+    {
+      "src": "./images/screenshot-mobile-1.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tampilan Mobile"
+    },
+    {
+      "src": "./images/screenshot-desktop-2.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tampilan Dashboard"
+    },
+    {
+      "src": "./images/screenshot-mobile-2.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tampilan Mobile"
+    }
+  ]
+}
