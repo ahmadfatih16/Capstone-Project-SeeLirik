@@ -8,6 +8,28 @@ import { openModal } from '../../utils/modal-handler.js';
 import presenter from './monitoring-presenter.js';
 import io from 'socket.io-client';
 
+const activeDetections = new Map();
+
+function drawBoundingBoxWithLabel(ctx, box, confidence) {
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(box.x, box.y, box.width, box.height);
+
+  const fontSize = 30;
+  ctx.font = `${fontSize}px sans-serif`;
+  const text = `${(confidence * 100).toFixed(1)}%`;
+  const textWidth = ctx.measureText(text).width;
+  const padding = 4;
+
+  const labelX = box.x + box.width - textWidth - padding * 2;
+  const labelY = box.y;
+
+  ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+  ctx.fillRect(labelX, labelY, textWidth + padding * 2, fontSize + padding);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(text, labelX + padding, labelY + fontSize);
+}
+
 export default class MonitoringPage {
   constructor() {
     this.stream = null;
@@ -45,73 +67,47 @@ export default class MonitoringPage {
     presenter.setView(this);
     presenter.renderAllCameras();
 
-    // SOCKET.IO: Dengarkan bounding box dari WebSocket server
-    // const socket = io('http://localhost:4000');
     const socket = io('https://realtime-server-seelirik-production.up.railway.app');
-
-
     socket.on('new_detection', (data) => {
-      const { camera_name, bounding_box, label } = data;
-      console.log('📦 Event Diterima:', { camera_name, bounding_box, label });
-    
+      const { camera_name, bounding_box, label, confidence } = data;
+      console.log('📦 Event Diterima:', { camera_name, bounding_box, label, confidence });
+
       const card = [...document.querySelectorAll('.kamera-preview')]
         .find(el => el.dataset.cameraName === camera_name);
-    
+
       if (!card) {
         console.warn('❌ Kamera tidak ditemukan:', camera_name);
         return;
       }
-    
+
       const video = card.querySelector('video');
-      console.log('🎥 Video ditemukan:', video);
-    
-      const wrapper = video.closest('.relative');
-      if (!wrapper) {
-        console.warn('❌ Tidak menemukan elemen .relative untuk video');
-        return;
-      }
-    
-      // Debug ukuran video
-      console.log('📏 video.videoWidth:', video.videoWidth);
-      console.log('📏 video.offsetWidth:', video.offsetWidth);
-      console.log('📏 video.videoHeight:', video.videoHeight);
-      console.log('📏 video.offsetHeight:', video.offsetHeight);
-    
-      const scaleX = video.offsetWidth / video.videoWidth;
-      const scaleY = video.offsetHeight / video.videoHeight;
-      console.log('🔍 scaleX:', scaleX, 'scaleY:', scaleY);
-    
-      const scaled = {
-        left: bounding_box.x * scaleX,
-        top: bounding_box.y * scaleY,
+      const canvas = card.querySelector('canvas');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const scaleX = canvas.width / video.videoWidth;
+      const scaleY = canvas.height / video.videoHeight;
+
+      const scaledBox = {
+        x: bounding_box.x * scaleX,
+        y: bounding_box.y * scaleY,
         width: bounding_box.width * scaleX,
         height: bounding_box.height * scaleY,
       };
-      console.log('📦 Bounding Box Scaled:', scaled);
-    
-      const box = document.createElement('div');
-      box.className = 'absolute border-2 border-red-600 bg-red-600/20 rounded z-50 pointer-events-none box-border';
-      box.style.left = `${scaled.left}px`;
-      box.style.top = `${scaled.top}px`;
-      box.style.width = `${scaled.width}px`;
-      box.style.height = `${scaled.height}px`;
-    
-      const labelBox = document.createElement('span');
-      labelBox.className = 'absolute -top-4 left-0 bg-red-600 text-white text-xs px-1 rounded';
-      labelBox.textContent = label || 'Terdeteksi';
-      box.appendChild(labelBox);
-    
-      wrapper.appendChild(box);
-    
-      console.log('✅ Bounding Box ditambahkan ke:', wrapper);
-    
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBoundingBoxWithLabel(ctx, scaledBox, confidence || 0);
+
+      // Simpan deteksi terakhir di data atribut
+      card.dataset.lastDetection = JSON.stringify({ box: scaledBox, confidence });
+
       setTimeout(() => {
-        box.remove();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        delete card.dataset.lastDetection;
       }, 3000);
     });
-    
-    
-    
   }
 
   showCameraCard(cardElement) {
@@ -129,8 +125,9 @@ export default class MonitoringPage {
     card.style.position = 'relative';
 
     card.innerHTML = `
-      <div class="relative">
-        <video autoplay muted loop class="rounded w-full aspect-video bg-black"></video>
+      <div class="video-wrapper relative w-full aspect-video bg-black rounded overflow-hidden">
+        <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-contain rounded"></video>
+        <canvas class="absolute top-0 left-0 w-full h-full pointer-events-none"></canvas>
       </div>
       <div class="mt-3 text-white flex justify-between items-center">
         <span class="font-medium">${name}</span>
@@ -143,6 +140,8 @@ export default class MonitoringPage {
     `;
 
     const video = card.querySelector('video');
+    const canvas = card.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
     video.srcObject = stream;
 
     card.querySelector('.fa-expand').onclick = () => video.requestFullscreen();
@@ -155,10 +154,51 @@ export default class MonitoringPage {
     };
 
     card.querySelector('.fa-power-off').onclick = () => {
+      const intervalId = activeDetections.get(card);
+      if (intervalId) clearInterval(intervalId);
+      activeDetections.delete(card);
       stream.getTracks().forEach(t => t.stop());
       card.remove();
       onDelete?.();
     };
+
+    const captureCanvas = document.createElement('canvas');
+    const intervalId = setInterval(async () => {
+      if (!video.videoWidth) return;
+
+      captureCanvas.width = video.videoWidth;
+      captureCanvas.height = video.videoHeight;
+      const captureCtx = captureCanvas.getContext('2d');
+      captureCtx.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
+
+      const lastDetection = card.dataset.lastDetection;
+      if (lastDetection) {
+        const parsed = JSON.parse(lastDetection);
+        drawBoundingBoxWithLabel(captureCtx, parsed.box, parsed.confidence || 0);
+      }
+
+      captureCanvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append('image', blob, 'snapshot.jpg');
+        formData.append('camera_id', id);
+        formData.append('camera_name', name);
+
+        const token = localStorage.getItem('token');
+        try {
+          await fetch('http://localhost:3000/snapshots', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            body: formData
+          });
+        } catch (err) {
+          console.error('❌ Gagal kirim snapshot:', err);
+        }
+      }, 'image/jpeg');
+    }, 1000);
+
+    activeDetections.set(card, intervalId);
 
     return card;
   }
