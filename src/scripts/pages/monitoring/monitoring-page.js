@@ -185,7 +185,9 @@ export default class MonitoringPage {
 
         const token = localStorage.getItem('token');
         try {
-          await fetch('http://localhost:3000/snapshots', {
+          // await fetch('http://localhost:3000/snapshots', {
+            await fetch('https://backend-capstone-seelirik-production.up.railway.app/snapshots', {
+            
             method: 'POST',
             headers: {
               Authorization: `Bearer ${token}`
@@ -195,7 +197,7 @@ export default class MonitoringPage {
         } catch (err) {
           console.error('❌ Gagal kirim snapshot:', err);
         }
-      }, 'image/jpeg');
+      }, 'image/jpeg', 0.5);
     }, 1000);
 
     activeDetections.set(card, intervalId);
