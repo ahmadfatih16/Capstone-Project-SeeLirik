@@ -17,13 +17,14 @@ const CameraService = {
   },
 
   getCameraById(id) {
-    return Promise.resolve(this._cameras.find(cam => cam.id === id));
+    return Promise.resolve(this._cameras.find((cam) => cam.id === id));
   },
 
   updateCamera(updatedCamera) {
     return new Promise((resolve) => {
-      setTimeout(() => { // Simulate API call delay
-        const index = this._cameras.findIndex(cam => cam.id === updatedCamera.id);
+      setTimeout(() => {
+        // Simulate API call delay
+        const index = this._cameras.findIndex((cam) => cam.id === updatedCamera.id);
         if (index !== -1) {
           this._cameras[index] = { ...this._cameras[index], ...updatedCamera };
           console.log('Camera updated in service:', this._cameras[index]);
@@ -37,16 +38,16 @@ const CameraService = {
 
   deleteCamera(id) {
     return new Promise((resolve) => {
-      setTimeout(() => { // Simulate API call delay
+      setTimeout(() => {
+        // Simulate API call delay
         const initialLength = this._cameras.length;
-        this._cameras = this._cameras.filter(cam => cam.id !== id);
+        this._cameras = this._cameras.filter((cam) => cam.id !== id);
         console.log('Camera deleted in service:', id);
         resolve(this._cameras.length < initialLength); // True if deleted
       }, 500);
     });
-  }
+  },
 };
-
 
 export default class PreviewPresenter {
   constructor(view) {
@@ -68,8 +69,8 @@ export default class PreviewPresenter {
 
     let initialCamera = null;
     if (initialCameraId) {
-      initialCamera = this.cameras.find(cam => cam.id === initialCameraId);
-      this.currentCameraIndex = this.cameras.findIndex(cam => cam.id === initialCameraId);
+      initialCamera = this.cameras.find((cam) => cam.id === initialCameraId);
+      this.currentCameraIndex = this.cameras.findIndex((cam) => cam.id === initialCameraId);
     }
 
     // Fallback if ID is not found or not provided, default to the first camera
@@ -93,7 +94,8 @@ export default class PreviewPresenter {
    */
   handlePrevCamera() {
     if (this.cameras.length === 0) return;
-    this.currentCameraIndex = (this.currentCameraIndex > 0) ? this.currentCameraIndex - 1 : this.cameras.length - 1;
+    this.currentCameraIndex =
+      this.currentCameraIndex > 0 ? this.currentCameraIndex - 1 : this.cameras.length - 1;
     this.view.setCurrentCameraDisplay(this.cameras[this.currentCameraIndex]);
   }
 
@@ -102,7 +104,8 @@ export default class PreviewPresenter {
    */
   handleNextCamera() {
     if (this.cameras.length === 0) return;
-    this.currentCameraIndex = (this.currentCameraIndex < this.cameras.length - 1) ? this.currentCameraIndex + 1 : 0;
+    this.currentCameraIndex =
+      this.currentCameraIndex < this.cameras.length - 1 ? this.currentCameraIndex + 1 : 0;
     this.view.setCurrentCameraDisplay(this.cameras[this.currentCameraIndex]);
   }
 
@@ -131,7 +134,7 @@ export default class PreviewPresenter {
     const updatedCamera = {
       id: this.selectedCameraId,
       name: newName,
-      url: newUrl
+      url: newUrl,
     };
 
     // Simulate API call to update the camera
@@ -139,12 +142,15 @@ export default class PreviewPresenter {
 
     if (result) {
       // Update the local cameras array
-      const index = this.cameras.findIndex(cam => cam.id === result.id);
+      const index = this.cameras.findIndex((cam) => cam.id === result.id);
       if (index !== -1) {
         this.cameras[index] = result;
       }
       // If the edited camera is currently displayed, update the view immediately
-      if (this.cameras[this.currentCameraIndex] && this.cameras[this.currentCameraIndex].id === this.selectedCameraId) {
+      if (
+        this.cameras[this.currentCameraIndex] &&
+        this.cameras[this.currentCameraIndex].id === this.selectedCameraId
+      ) {
         this.view.setCurrentCameraDisplay(result);
       }
       alert('Kamera berhasil diperbarui!');
@@ -188,7 +194,7 @@ export default class PreviewPresenter {
 
     if (success) {
       // Update the local cameras array by filtering out the disconnected camera
-      this.cameras = this.cameras.filter(cam => cam.id !== this.selectedCameraId);
+      this.cameras = this.cameras.filter((cam) => cam.id !== this.selectedCameraId);
 
       // Adjust currentCameraIndex if the removed camera was the last one
       if (this.currentCameraIndex >= this.cameras.length && this.cameras.length > 0) {

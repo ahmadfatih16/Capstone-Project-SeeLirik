@@ -4,7 +4,7 @@ import ModalFormKamera from '../components/modal/modal-form-kamera.js';
 let previewStream = null;
 const STANDARD_RESOLUTION = {
   width: { exact: 1280 },
-  height: { exact: 720 }
+  height: { exact: 720 },
 };
 
 async function openModal() {
@@ -36,7 +36,7 @@ function attachModalEvents() {
     const name = document.getElementById('namaKamera').value;
     const deviceId = document.getElementById('selectDevice').value;
     // await presenter.addNewCamera(name, deviceId);
-    presenter.handleAddCamera(name, deviceId); 
+    presenter.handleAddCamera(name, deviceId);
     stopPreview();
     modal.classList.add('hidden');
   });
@@ -44,10 +44,12 @@ function attachModalEvents() {
 
 async function updateSelectDevice() {
   const select = document.getElementById('selectDevice');
-  const devices = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'videoinput');
+  const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
+    (d) => d.kind === 'videoinput'
+  );
   select.innerHTML = '';
 
-  devices.forEach(device => {
+  devices.forEach((device) => {
     const option = new Option(device.label || 'Kamera', device.deviceId);
     select.appendChild(option);
   });
@@ -84,10 +86,9 @@ async function previewCamera(deviceId) {
   }
 }
 
-
 function stopPreview() {
   if (previewStream) {
-    previewStream.getTracks().forEach(track => track.stop());
+    previewStream.getTracks().forEach((track) => track.stop());
     previewStream = null;
     const vid = document.getElementById('previewKamera');
     if (vid) vid.srcObject = null;

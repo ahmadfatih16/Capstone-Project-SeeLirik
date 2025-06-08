@@ -50,7 +50,6 @@ export default class RiwayatPage {
     // Initialize presenter
     await this.presenter.init();
     this.addRowClickListener();
-
   }
 
   // Method untuk update tampilan tabel dari presenter
@@ -62,17 +61,17 @@ export default class RiwayatPage {
       const waktuObj = new Date(item.created_at);
       const date = new Date(item.created_at);
       const tanggalFormatted = date.toLocaleDateString('id-ID', {
-        weekday: 'long',    // Senin, Selasa, ...
+        weekday: 'long', // Senin, Selasa, ...
         year: 'numeric',
-        month: 'long',      // Januari, Februari, ...
-        day: 'numeric'
+        month: 'long', // Januari, Februari, ...
+        day: 'numeric',
       });
       const waktuFix = waktuObj.toLocaleTimeString('id-ID', {
         hour: '2-digit',
         minute: '2-digit',
         timeZone: 'Asia/Jakarta',
       });
-      
+
       const row = `
       <tr class="hover:bg-neutral-800 cursor-pointer"
           data-id="${item.id}"
@@ -88,7 +87,7 @@ export default class RiwayatPage {
         <td class="px-4 py-2">${item.label}</td>
       </tr>
     `;
-    
+
       tableBody.innerHTML += row;
     });
   }
@@ -104,7 +103,7 @@ export default class RiwayatPage {
       });
     });
   }
-  
+
   // Method untuk menampilkan loading state
   showLoading() {
     const tableBody = document.getElementById('riwayat-table-body');

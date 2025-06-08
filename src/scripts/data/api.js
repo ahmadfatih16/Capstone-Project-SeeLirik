@@ -82,7 +82,6 @@ async function fetchCameras() {
   return await response.json();
 }
 
-
 async function addCamera(cameraData) {
   const token = localStorage.getItem('token');
   const response = await fetch(`${BASE_URL_BACKEND}/cameras`, {
@@ -98,8 +97,6 @@ async function addCamera(cameraData) {
   return await response.json();
 }
 
-
-
 async function editCameraName(id, newName) {
   const token = localStorage.getItem('token');
 
@@ -107,9 +104,9 @@ async function editCameraName(id, newName) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ name: newName })
+    body: JSON.stringify({ name: newName }),
   });
 
   if (!response.ok) {
@@ -118,8 +115,6 @@ async function editCameraName(id, newName) {
 
   return response.json();
 }
-
-
 
 async function deleteCamera(id) {
   const token = localStorage.getItem('token');
@@ -135,14 +130,6 @@ async function deleteCamera(id) {
     console.error('[DEBUG] Gagal DELETE:', res.status, msg);
     throw new Error('Gagal menghapus kamera');
   }
-  
 }
 
-
-export {
-  fetchCameras,
-  addCamera,
-  editCameraName,
-  deleteCamera
-};
-
+export { fetchCameras, addCamera, editCameraName, deleteCamera };

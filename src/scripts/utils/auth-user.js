@@ -1,6 +1,5 @@
 import { BASE_URL_BACKEND } from '../data/api';
 
-
 export const getUserData = async () => {
   const token = localStorage.getItem('token');
   if (!token) return null;

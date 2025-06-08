@@ -2,9 +2,6 @@ import { getUserToken } from './auth-user.js';
 import { BASE_URL_BACKEND } from '../data/api.js';
 import { getRiwayat } from '../data/api.js';
 
-
-
-
 export async function fetchRecentRiwayat(limit = 5) {
   try {
     const token = getUserToken();
@@ -13,18 +10,15 @@ export async function fetchRecentRiwayat(limit = 5) {
         Authorization: `Bearer ${token}`,
       },
     });
-    
 
     const result = await response.json();
-    const data = result.histories; 
-    
+    const data = result.histories;
 
     if (!Array.isArray(data)) return [];
 
     return data
-  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // urutkan dari terbaru
-  .slice(0, limit); // ambil 5 pertama
-
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // urutkan dari terbaru
+      .slice(0, limit); // ambil 5 pertama
   } catch (err) {
     console.error('Gagal mengambil data riwayat:', err);
     return [];

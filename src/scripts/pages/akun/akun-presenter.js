@@ -32,7 +32,8 @@ export default class AkunPresenter {
 
       document.getElementById('edit-store-name').value = this.akunData?.store_name || '';
       document.getElementById('edit-store-location').value = this.akunData?.address || '';
-      document.getElementById('edit-store-description').value = this.akunData?.store_description || '';
+      document.getElementById('edit-store-description').value =
+        this.akunData?.store_description || '';
       document.getElementById('edit-username').value = this.akunData?.username || '';
     });
 
