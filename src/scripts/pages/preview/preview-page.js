@@ -237,18 +237,34 @@ export default class PreviewPage {
 
   _bindUIEvents() {
     // Navigation Buttons
-    document.getElementById('prev-camera')?.addEventListener('click', () => this.presenter.handlePrevCamera());
-    document.getElementById('next-camera')?.addEventListener('click', () => this.presenter.handleNextCamera());
-    document.getElementById('prev-camera-mobile')?.addEventListener('click', () => this.presenter.handlePrevCamera());
-    document.getElementById('next-camera-mobile')?.addEventListener('click', () => this.presenter.handleNextCamera());
+    document
+      .getElementById('prev-camera')
+      ?.addEventListener('click', () => this.presenter.handlePrevCamera());
+    document
+      .getElementById('next-camera')
+      ?.addEventListener('click', () => this.presenter.handleNextCamera());
+    document
+      .getElementById('prev-camera-mobile')
+      ?.addEventListener('click', () => this.presenter.handlePrevCamera());
+    document
+      .getElementById('next-camera-mobile')
+      ?.addEventListener('click', () => this.presenter.handleNextCamera());
 
     // Action Buttons - Using IDs from your original HTML: "edit-camera" and "disconnect-camera"
-    document.getElementById('edit-camera')?.addEventListener('click', () => this.presenter.handleEditCameraClick());
-    document.getElementById('disconnect-camera')?.addEventListener('click', () => this.presenter.handleDisconnectCameraClick());
-    document.getElementById('back-to-monitoring')?.addEventListener('click', () => window.location.hash = '#/monitoring');
+    document
+      .getElementById('edit-camera')
+      ?.addEventListener('click', () => this.presenter.handleEditCameraClick());
+    document
+      .getElementById('disconnect-camera')
+      ?.addEventListener('click', () => this.presenter.handleDisconnectCameraClick());
+    document
+      .getElementById('back-to-monitoring')
+      ?.addEventListener('click', () => (window.location.hash = '#/monitoring'));
 
     // Modal Edit Camera - Using IDs from your original HTML and consistent input IDs
-    document.getElementById('cancel-edit-kamera')?.addEventListener('click', () => this.presenter.handleCancelEdit());
+    document
+      .getElementById('cancel-edit-kamera')
+      ?.addEventListener('click', () => this.presenter.handleCancelEdit());
     document.getElementById('modal-edit-kamera')?.addEventListener('click', (e) => {
       if (e.target === document.getElementById('modal-edit-kamera')) {
         this.presenter.handleCancelEdit();
@@ -262,8 +278,12 @@ export default class PreviewPage {
     });
 
     // Modal Disconnect Camera - Using IDs from your original HTML: "batal-disconnect" and "konfirm-disconnect"
-    document.getElementById('batal-disconnect')?.addEventListener('click', () => this.presenter.handleCancelDisconnect());
-    document.getElementById('konfirm-disconnect')?.addEventListener('click', () => this.presenter.handleConfirmDisconnect());
+    document
+      .getElementById('batal-disconnect')
+      ?.addEventListener('click', () => this.presenter.handleCancelDisconnect());
+    document
+      .getElementById('konfirm-disconnect')
+      ?.addEventListener('click', () => this.presenter.handleConfirmDisconnect());
     document.getElementById('modal-disconnect')?.addEventListener('click', (e) => {
       if (e.target === document.getElementById('modal-disconnect')) {
         this.presenter.handleCancelDisconnect();

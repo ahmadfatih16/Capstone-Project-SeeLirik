@@ -72,8 +72,9 @@ export default class MonitoringPage {
       const { camera_name, bounding_box, label, confidence } = data;
       console.log('📦 Event Diterima:', { camera_name, bounding_box, label, confidence });
 
-      const card = [...document.querySelectorAll('.kamera-preview')]
-        .find(el => el.dataset.cameraName === camera_name);
+      const card = [...document.querySelectorAll('.kamera-preview')].find(
+        (el) => el.dataset.cameraName === camera_name
+      );
 
       if (!card) {
         console.warn('❌ Kamera tidak ditemukan:', camera_name);
@@ -146,7 +147,7 @@ export default class MonitoringPage {
 
     card.querySelector('.fa-expand').onclick = () => video.requestFullscreen();
     card.querySelector('.fa-pen').onclick = () => {
-      const newName = prompt("Masukkan nama baru:", name);
+      const newName = prompt('Masukkan nama baru:', name);
       if (newName) {
         card.querySelector('span').innerText = newName;
         onEdit?.(newName);
@@ -157,7 +158,7 @@ export default class MonitoringPage {
       const intervalId = activeDetections.get(card);
       if (intervalId) clearInterval(intervalId);
       activeDetections.delete(card);
-      stream.getTracks().forEach(t => t.stop());
+      stream.getTracks().forEach((t) => t.stop());
       card.remove();
       onDelete?.();
     };
@@ -177,27 +178,30 @@ export default class MonitoringPage {
         drawBoundingBoxWithLabel(captureCtx, parsed.box, parsed.confidence || 0);
       }
 
-      captureCanvas.toBlob(async (blob) => {
-        const formData = new FormData();
-        formData.append('image', blob, 'snapshot.jpg');
-        formData.append('camera_id', id);
-        formData.append('camera_name', name);
+      captureCanvas.toBlob(
+        async (blob) => {
+          const formData = new FormData();
+          formData.append('image', blob, 'snapshot.jpg');
+          formData.append('camera_id', id);
+          formData.append('camera_name', name);
 
-        const token = localStorage.getItem('token');
-        try {
-          // await fetch('http://localhost:3000/snapshots', {
+          const token = localStorage.getItem('token');
+          try {
+            // await fetch('http://localhost:3000/snapshots', {
             await fetch('https://backend-capstone-seelirik-production.up.railway.app/snapshots', {
-            
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-            body: formData
-          });
-        } catch (err) {
-          console.error('❌ Gagal kirim snapshot:', err);
-        }
-      }, 'image/jpeg', 0.5);
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
+          } catch (err) {
+            console.error('❌ Gagal kirim snapshot:', err);
+          }
+        },
+        'image/jpeg',
+        0.5
+      );
     }, 1000);
 
     activeDetections.set(card, intervalId);

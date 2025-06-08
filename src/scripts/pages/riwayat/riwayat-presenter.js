@@ -38,10 +38,14 @@ export default class RiwayatPresenter {
       const tableBody = document.getElementById('riwayat-table-body');
       const now = new Date();
       const tanggalFormatted = now.toLocaleDateString('id-ID', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       });
       const waktuFormatted = now.toLocaleTimeString('id-ID', {
-        hour: '2-digit', minute: '2-digit'
+        hour: '2-digit',
+        minute: '2-digit',
       });
 
       const newRow = document.createElement('tr');

@@ -4,9 +4,6 @@ import { io } from 'socket.io-client';
 // window.socket = io('http://localhost:4000');
 window.socket = io('https://realtime-server-seelirik-production.up.railway.app');
 
-
-
-
 const App = {
   async renderPage() {
     // Cek apakah View Transitions API didukung browser
@@ -39,12 +36,12 @@ const App = {
     // Bersihkan konten yang ada. View Transitions API mengambil snapshot DOM sebelum ini.
     mainContent.innerHTML = '';
     mainContent.style.transition = ''; // Reset gaya transisi sebelumnya
-    mainContent.style.opacity = '1';   // Pastikan opacity penuh
+    mainContent.style.opacity = '1'; // Pastikan opacity penuh
 
     // Render konten halaman baru dan jalankan logika afterRender
     mainContent.innerHTML = await page.render();
     await page.afterRender?.(); // Panggil afterRender jika ada
-  }
+  },
 };
 
 export default App;

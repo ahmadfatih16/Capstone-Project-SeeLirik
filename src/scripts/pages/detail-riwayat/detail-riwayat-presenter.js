@@ -4,7 +4,6 @@ export default class DetailRiwayatPresenter {
     this.id = sessionStorage.getItem('selectedActivityId'); // Ambil dari session
     this.activityData = {};
   }
-  
 
   async loadActivityData() {
     try {
@@ -22,15 +21,16 @@ export default class DetailRiwayatPresenter {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       });
 
-      const waktuFormatted = fullDateTime.toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      }) + ' WIB';
+      const waktuFormatted =
+        fullDateTime.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }) + ' WIB';
 
       this.activityData = {
         detected_date: tanggalFormatted,

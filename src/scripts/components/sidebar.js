@@ -60,10 +60,14 @@ export default async function Sidebar() {
         const { camera_name, label } = data;
         const now = new Date();
         const tanggal = now.toLocaleDateString('id-ID', {
-          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
         });
         const waktu = now.toLocaleTimeString('id-ID', {
-          hour: '2-digit', minute: '2-digit'
+          hour: '2-digit',
+          minute: '2-digit',
         });
 
         const html = `
