@@ -59,7 +59,7 @@ export default class RiwayatPresenter {
       `;
 
       newRow.addEventListener('click', () => {
-        sessionStorage.setItem('selectedActivityData', JSON.stringify(data));
+        sessionStorage.setItem('selectedActivityId', data.id);
         window.location.href = '#/detail-riwayat';
       });
 
