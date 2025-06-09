@@ -188,7 +188,7 @@ export default class MonitoringPage {
           const token = localStorage.getItem('token');
           try {
             // await fetch('http://localhost:3000/snapshots', {
-            await fetch('https://backend-capstone-seelirik-production.up.railway.app/snapshots', {
+            await fetch('https://seelirik-backend-server-production.up.railway.app/snapshots', {
               method: 'POST',
               headers: {
                 Authorization: `Bearer ${token}`,
