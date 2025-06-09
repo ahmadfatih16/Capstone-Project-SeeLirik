@@ -100,7 +100,6 @@ export default class RiwayatPage {
         const id = row.dataset.id;
         sessionStorage.setItem('selectedActivityId', row.dataset.id);
         window.location.href = '#/detail-riwayat';
-        
       });
     });
   }

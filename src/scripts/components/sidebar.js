@@ -39,42 +39,47 @@ export default async function Sidebar() {
           .join('')
       : `<p class="text-sm text-center text-neutral-400">Belum ada riwayat</p>`;
 
-      setTimeout(() => {
-        const links = document.querySelectorAll('.riwayat-link');
-        links.forEach((link) => {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const item = JSON.parse(link.dataset.riwayat);
-            sessionStorage.setItem('selectedActivityId', item.id);
-          
-            if (window.location.hash === '#/detail-riwayat') {
-              location.reload(); // jika sudah di detail, reload ulang
-            } else {
-              window.location.href = '#/detail-riwayat';
-            }
-          });
-          
+  setTimeout(() => {
+    const links = document.querySelectorAll('.riwayat-link');
+    links.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const item = JSON.parse(link.dataset.riwayat);
+        sessionStorage.setItem('selectedActivityId', item.id);
+
+        if (window.location.hash === '#/detail-riwayat') {
+          location.reload(); // jika sudah di detail, reload ulang
+        } else {
+          window.location.href = '#/detail-riwayat';
+        }
+      });
+    });
+
+    // 🔁 Tambahkan listener realtime
+    const socket = window.socket;
+    const container = document.querySelector('#sidebar .custom-scrollbar');
+    if (socket && container) {
+      socket.on('new_detection', (data) => {
+        // 🔊 Mainkan alarm
+        const audio = new Audio('../../public/sounds/alarm.mp3');
+        audio.play().catch((err) => {
+          console.warn('Gagal memutar alarm:', err);
         });
-      
-        // 🔁 Tambahkan listener realtime
-        const socket = window.socket;
-        const container = document.querySelector('#sidebar .custom-scrollbar');
-        if (socket && container) {
-          socket.on('new_detection', (data) => {
-            const { camera_name, label, id } = data;
-            const now = new Date();
-            const tanggal = now.toLocaleDateString('id-ID', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            });
-            const waktu = now.toLocaleTimeString('id-ID', {
-              hour: '2-digit',
-              minute: '2-digit',
-            });
-      
-            const html = `
+
+        const { camera_name, label, id } = data;
+        const now = new Date();
+        const tanggal = now.toLocaleDateString('id-ID', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+        const waktu = now.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        const html = `
               <a href="#" 
                  class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
                  data-riwayat='${JSON.stringify(data)}'>
@@ -85,24 +90,23 @@ export default async function Sidebar() {
                 <div class="text-xs">${waktu} WIB <span>| ${camera_name}</span></div>
               </a>
             `;
-      
-            container.insertAdjacentHTML('afterbegin', html);
-      
-            const link = container.querySelector('.riwayat-link');
-            link?.addEventListener('click', (e) => {
-              e.preventDefault();
-              sessionStorage.setItem('selectedActivityId', data.id);
-              window.location.href = '#/detail-riwayat';
-            });
-      
-            const allLinks = container.querySelectorAll('.riwayat-link');
-            if (allLinks.length > 5) {
-              allLinks[allLinks.length - 1].remove();
-            }
-          });
+
+        container.insertAdjacentHTML('afterbegin', html);
+
+        const link = container.querySelector('.riwayat-link');
+        link?.addEventListener('click', (e) => {
+          e.preventDefault();
+          sessionStorage.setItem('selectedActivityId', data.id);
+          window.location.href = '#/detail-riwayat';
+        });
+
+        const allLinks = container.querySelectorAll('.riwayat-link');
+        if (allLinks.length > 5) {
+          allLinks[allLinks.length - 1].remove();
         }
-      }, 0);
-      
+      });
+    }
+  }, 0);
 
   return `
     <aside id="sidebar" class="w-full sm:w-72 max-w-full bg-neutral-800 p-4 h-screen fixed overflow-y-auto z-50 transform lg:translate-x-0 -translate-x-full transition-transform duration-300 text-white custom-scrollbar">

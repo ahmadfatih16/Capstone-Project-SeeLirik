@@ -13,7 +13,6 @@ export default class DetailRiwayatPresenter {
 
       const response = await getRiwayatDetail(this.id);
       const data = response.history;
-      
 
       const fullDateTime = new Date(`${data.detected_date}T${data.detected_time}+07:00`);
       const tanggalFormatted = fullDateTime.toLocaleDateString('id-ID', {
@@ -23,12 +22,13 @@ export default class DetailRiwayatPresenter {
         day: 'numeric',
       });
 
-      const waktuFormatted = fullDateTime.toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      }) + ' WIB';
+      const waktuFormatted =
+        fullDateTime.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }) + ' WIB';
 
       this.activityData = {
         detected_date: tanggalFormatted,

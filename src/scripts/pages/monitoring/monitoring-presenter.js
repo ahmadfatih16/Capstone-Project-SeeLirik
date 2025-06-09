@@ -12,34 +12,34 @@ const presenter = {
     view = v;
   },
 
-
-
   async renderAllCameras() {
     if (!view) return;
     try {
       const response = await getAllCameras();
       const cameras = response.cameras;
       view.clearCameraGrid?.();
-  
+
       // Ambil daftar perangkat kamera yang tersedia di perangkat saat ini
       const availableDevices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = availableDevices.filter((d) => d.kind === 'videoinput');
       const availableDeviceIds = videoDevices.map((d) => d.deviceId);
-  
+
       for (const cam of cameras) {
         try {
           let constraints;
-  
+
           if (availableDeviceIds.includes(cam.device_id)) {
             // Jika deviceId valid, gunakan
             constraints = { video: { deviceId: { exact: cam.device_id } } };
           } else {
-            console.warn(`🔁 Kamera "${cam.name}" dengan deviceId "${cam.device_id}" tidak ditemukan. Gunakan kamera default.`);
+            console.warn(
+              `🔁 Kamera "${cam.name}" dengan deviceId "${cam.device_id}" tidak ditemukan. Gunakan kamera default.`
+            );
             constraints = { video: true };
           }
-  
+
           const stream = await navigator.mediaDevices.getUserMedia(constraints);
-  
+
           const element = view.createCameraCard({
             id: cam.id,
             name: cam.name,
@@ -53,7 +53,7 @@ const presenter = {
               this.renderAllCameras();
             },
           });
-  
+
           view.showCameraCard(element);
         } catch (err) {
           console.error(`🚫 Tidak bisa membuka kamera "${cam.name}":`, err.message);
@@ -63,7 +63,6 @@ const presenter = {
       console.error('Gagal mengambil daftar kamera:', error);
     }
   },
-  
 
   async handleAddCamera(nama, deviceId) {
     if (!view) return;
