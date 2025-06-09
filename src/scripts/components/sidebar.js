@@ -42,12 +42,15 @@ export default async function Sidebar() {
   setTimeout(() => {
     const links = document.querySelectorAll('.riwayat-link');
     links.forEach((link) => {
-      link.addEventListener('click', () => {
-        const data = link.dataset.riwayat;
-        sessionStorage.setItem('selectedActivityData', data);
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const item = JSON.parse(link.dataset.riwayat);
+        sessionStorage.setItem('selectedActivityId', item.id);
 
         if (window.location.hash === '#/detail-riwayat') {
-          location.reload();
+          location.reload(); // jika sudah di detail, reload ulang
+        } else {
+          window.location.href = '#/detail-riwayat';
         }
       });
     });
@@ -57,7 +60,13 @@ export default async function Sidebar() {
     const container = document.querySelector('#sidebar .custom-scrollbar');
     if (socket && container) {
       socket.on('new_detection', (data) => {
-        const { camera_name, label } = data;
+        // 🔊 Mainkan alarm
+        const audio = new Audio('../../public/sounds/alarm.mp3');
+        audio.play().catch((err) => {
+          console.warn('Gagal memutar alarm:', err);
+        });
+
+        const { camera_name, label, id } = data;
         const now = new Date();
         const tanggal = now.toLocaleDateString('id-ID', {
           weekday: 'long',
@@ -71,23 +80,24 @@ export default async function Sidebar() {
         });
 
         const html = `
-          <a href="#/detail-riwayat" 
-             class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
-             data-riwayat='${JSON.stringify(data)}'>
-            <div class="flex justify-between items-center">
-              <span class="text-xs">${tanggal}</span>
-              <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
-            </div>
-            <div class="text-xs">${waktu} WIB <span>| ${camera_name}</span></div>
-          </a>
-        `;
+              <a href="#" 
+                 class="riwayat-link flex flex-col bg-neutral-800 rounded-md p-2 text-white hover:bg-neutral-700 transition mb-2"
+                 data-riwayat='${JSON.stringify(data)}'>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs">${tanggal}</span>
+                  <i class="fa-solid fa-bell text-yellow-400 text-xl"></i>
+                </div>
+                <div class="text-xs">${waktu} WIB <span>| ${camera_name}</span></div>
+              </a>
+            `;
 
         container.insertAdjacentHTML('afterbegin', html);
 
         const link = container.querySelector('.riwayat-link');
-        link?.addEventListener('click', () => {
-          sessionStorage.setItem('selectedActivityData', JSON.stringify(data));
-          if (window.location.hash === '#/detail-riwayat') location.reload();
+        link?.addEventListener('click', (e) => {
+          e.preventDefault();
+          sessionStorage.setItem('selectedActivityId', data.id);
+          window.location.href = '#/detail-riwayat';
         });
 
         const allLinks = container.querySelectorAll('.riwayat-link');

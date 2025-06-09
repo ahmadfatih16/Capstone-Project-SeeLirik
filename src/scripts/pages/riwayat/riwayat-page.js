@@ -98,7 +98,7 @@ export default class RiwayatPage {
     rows.forEach((row) => {
       row.addEventListener('click', () => {
         const id = row.dataset.id;
-        sessionStorage.setItem('selectedActivityId', id);
+        sessionStorage.setItem('selectedActivityId', row.dataset.id);
         window.location.href = '#/detail-riwayat';
       });
     });

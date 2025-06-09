@@ -1,22 +1,20 @@
+import { getRiwayatDetail } from '../../data/api.js';
+
 export default class DetailRiwayatPresenter {
   constructor(view) {
     this.view = view;
-    this.id = sessionStorage.getItem('selectedActivityId'); // Ambil dari session
+    this.id = sessionStorage.getItem('selectedActivityId');
     this.activityData = {};
   }
 
   async loadActivityData() {
     try {
-      const savedData = sessionStorage.getItem('selectedActivityData');
-      if (!savedData) {
-        throw new Error('Data tidak ditemukan di sessionStorage');
-      }
+      if (!this.id) throw new Error('ID tidak ditemukan di sessionStorage');
 
-      const data = JSON.parse(savedData);
+      const response = await getRiwayatDetail(this.id);
+      const data = response.history;
 
-      // Gabungkan tanggal dan waktu ke dalam objek Date
       const fullDateTime = new Date(`${data.detected_date}T${data.detected_time}+07:00`);
-
       const tanggalFormatted = fullDateTime.toLocaleDateString('id-ID', {
         weekday: 'long',
         year: 'numeric',
@@ -46,9 +44,5 @@ export default class DetailRiwayatPresenter {
       console.error('Error loading activity data:', error);
       this.view.showError('Gagal memuat data aktivitas');
     }
-  }
-
-  getActivityData() {
-    return this.activityData;
   }
 }
