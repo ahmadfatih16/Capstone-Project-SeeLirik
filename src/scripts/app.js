@@ -6,41 +6,61 @@ window.socket = io('https://realtime-server-seelirik-production.up.railway.app')
 
 const App = {
   async renderPage() {
-    // Cek apakah View Transitions API didukung browser
-    if (document.startViewTransition) {
-      // Jika didukung, gunakan untuk transisi mulus
-      document.startViewTransition(async () => {
-        // Jalankan logika render halaman di dalam callback transisi
-        await this._performPageRender();
-      });
-    } else {
-      // Fallback jika browser tidak mendukung View Transitions
-      await this._performPageRender();
-    }
-  },
+  const url = UrlParser.parseActiveUrlWithCombiner();
+  const page = (routes[url] || routes['/'])();
+  const mainContent = document.getElementById('main-content');
 
-  async _performPageRender() {
-    const url = UrlParser.parseActiveUrlWithCombiner();
-    const page = (routes[url] || routes['/'])(); // Fallback ke '/' jika URL tidak ditemukan
+  if (!mainContent) return;
 
+  // 1. Buat clone dari konten lama
+  const oldContent = mainContent.cloneNode(true);
+  oldContent.id = 'main-content-clone'; // hindari ID ganda
+  oldContent.classList.add('page-transition', 'blur-out');
+
+  // 2. Masukkan clone ke DOM, di atas konten asli
+  mainContent.parentNode.insertBefore(oldContent, mainContent);
+
+  // 3. Sembunyikan konten asli dulu (agar tidak muncul saat blur-out)
+  mainContent.style.visibility = 'hidden';
+
+  // 4. Tunggu transisi blur-out selesai
+  await new Promise(resolve => setTimeout(resolve, 300));
+
+  // 5. Render konten baru
+  mainContent.innerHTML = await page.render();
+  await page.afterRender?.();
+
+  // 6. Tampilkan konten baru dan beri efek blur-in
+  mainContent.style.visibility = 'visible';
+  mainContent.classList.add('page-transition', 'blur-in');
+
+  // 7. Hapus clone lama
+  oldContent.remove();
+
+  // 8. Bersihkan class setelah animasi
+  setTimeout(() => {
+    mainContent.classList.remove('blur-in');
+  }, 400);
+}
+,
+
+
+  async _performPageRender(url) {
+    const page = (routes[url] || routes['/'])();
     const body = document.body;
-    // const mainContent = document.getElementById('app');
     const mainContent = document.getElementById('main-content');
 
-    // Atur kelas body untuk halaman otentikasi
     body.classList.remove('auth-page');
     if (url === '/login' || url === '/register') {
       body.classList.add('auth-page');
     }
 
-    // Bersihkan konten yang ada. View Transitions API mengambil snapshot DOM sebelum ini.
     mainContent.innerHTML = '';
-    mainContent.style.transition = ''; // Reset gaya transisi sebelumnya
-    mainContent.style.opacity = '1'; // Pastikan opacity penuh
+    mainContent.style.transition = '';
+    mainContent.style.opacity = '1';
 
-    // Render konten halaman baru dan jalankan logika afterRender
     mainContent.innerHTML = await page.render();
-    await page.afterRender?.(); // Panggil afterRender jika ada
+    await page.afterRender?.();
   },
 };
 
