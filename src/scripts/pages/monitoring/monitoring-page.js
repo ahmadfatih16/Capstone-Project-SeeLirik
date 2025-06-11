@@ -2,6 +2,7 @@ import Sidebar from '../../components/sidebar.js';
 import MobileNavbar, { initMobileNavbar } from '../../components/mobile-navbar.js';
 import DateTime, { initDateTime } from '../../components/datetime.js';
 import { setActiveSidebarLink } from '../../utils/sidebar-state.js';
+import ModalLogout from '../../components/modal/modal-logout.js';
 import initModalLogout from '../../utils/modal/init-modal-logout.js';
 import ModalFormKamera from '../../components/modal/modal-form-kamera.js';
 import { openModal } from '../../utils/modal-handler.js';
@@ -39,6 +40,7 @@ export default class MonitoringPage {
     return `
       ${MobileNavbar()}
       ${await Sidebar()}
+      ${ModalLogout()}
 
       <main class="lg:ml-72 p-4 sm:p-6 overflow-y-auto h-screen custom-scrollbar">
         ${DateTime()}
